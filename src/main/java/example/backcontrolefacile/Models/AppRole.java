@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 //paramettre sans arguments
-@ToString
+//@ToString
 @NoArgsConstructor
 public class AppRole {
     @Id
@@ -22,5 +22,6 @@ public class AppRole {
     @Enumerated(EnumType.STRING)
     @Column(length = 30)
     private ERole name;
+
 
 }

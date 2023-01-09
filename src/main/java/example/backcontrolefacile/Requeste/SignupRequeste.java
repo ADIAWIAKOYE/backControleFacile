@@ -28,7 +28,10 @@ public class SignupRequeste {
     /*@NotBlank
   @Size(min = 6, max = 40)*/
     private String password;
-    private Set<String> role;
+
+
+
+    private Set<String> approle;
 
 
 /*    public String getNom() {
@@ -68,5 +71,7 @@ public class SignupRequeste {
         this.role = role;
     }*/
 }
+
+
 
 

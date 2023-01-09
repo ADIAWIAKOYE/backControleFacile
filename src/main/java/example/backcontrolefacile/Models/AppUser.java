@@ -21,6 +21,7 @@ import java.util.Set;
 //paramettre sans arguments
 @ToString
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 public class AppUser {
 
     @Id
@@ -40,5 +41,12 @@ public class AppUser {
     private Set<AppRole> roles = new HashSet<>();
 
 
-
+    public AppUser(String nom, String prenom, String adresse, String telephone, String email, String password) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.adresse = adresse;
+        this.telephone = telephone;
+        this.email = email;
+        this.password = password;
+    }
 }

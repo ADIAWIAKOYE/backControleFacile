@@ -1,17 +1,14 @@
 package example.backcontrolefacile.Repositorys;
 
 import example.backcontrolefacile.Models.AppUser;
+import example.backcontrolefacile.Models.Policier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
-public interface AppUserRepository extends JpaRepository<AppUser, Long> {
+public interface PolicierRepository  extends JpaRepository<Policier, Long> {
 
-    Optional<AppUser> findByNom(String nom);
-
-    Boolean existsByNom(String nom);
+    Boolean existsByTelephone(String telephone);
 
     Boolean existsByEmail(String email);
 }
