@@ -11,4 +11,6 @@ public interface PolicierRepository  extends JpaRepository<Policier, Long> {
     Boolean existsByTelephone(String telephone);
 
     Boolean existsByEmail(String email);
+
+    Policier findByIdappuser(Long idappuser);
 }

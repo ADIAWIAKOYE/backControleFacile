@@ -15,6 +15,15 @@ import javax.persistence.Table;
 @AllArgsConstructor
 //@PrimaryKeyJoinColumn(name = "idappuser")
 public class Admin extends AppUser {
+    public Admin(String nom, String prenom, String domicile, String telephone, String email, String password, String profile) {
+        this.setNom(nom);
+        this.setPrenom(prenom);
+        this.setDomicile(domicile);
+        this.setTelephone(telephone);
+        this.setEmail(email);
+        this.setPassword(password);
+        this.setProfile(profile);
+    }
 
 
 

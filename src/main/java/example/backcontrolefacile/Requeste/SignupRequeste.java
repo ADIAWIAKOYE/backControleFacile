@@ -19,6 +19,7 @@ public class SignupRequeste {
 
     private String prenom;
     private String adresse;
+    //private String domicile;
     private String telephone;
    /* @NotBlank
     @Size(max = 50)

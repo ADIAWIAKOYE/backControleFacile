@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -41,10 +42,10 @@ public class PolicierServiceImpl implements PolicierService {
            // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
         }
 
-     /*   if (policierRepository.existsByEmail(policier.getEmail())) {
+        if (policierRepository.existsByEmail(policier.getEmail())) {
            return ResponseEntity.badRequest().body(new MessageResponse("Error: cet email est déjà utilisé !"));
            // return new MessageResponse("Error: cet email est déjà utilisé !");
-       }*/
+       }
 
         Set<AppRole> roles = new HashSet<>();
         AppRole policeRole = appRoleRepository.findByName(ERole.ROLE_POLICIER)
@@ -52,8 +53,64 @@ public class PolicierServiceImpl implements PolicierService {
         roles.add(policeRole);
         System.out.println("erttrtdtrtretretr"+roles);
         policier.setRoles(roles);
+        policier.setEtat(true);
         policier.setPassword(encoder.encode(policier.getPassword()));
         policierRepository.save(policier);
         return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès !"));
+    }
+
+    @Override
+    public ResponseEntity<?> UpdatePolicier(Long idappuser, Policier policier) {
+        if (policierRepository.findByIdappuser(idappuser) != null){
+            Policier updatePolicier = policierRepository.findById(idappuser).get();
+            updatePolicier.setNom(policier.getNom());
+            updatePolicier.setPrenom(policier.getPrenom());
+            updatePolicier.setDomicile(policier.getDomicile());
+            updatePolicier.setTelephone(policier.getTelephone());
+            updatePolicier.setPassword(policier.getPassword());
+            updatePolicier.setEmail(policier.getEmail());
+            updatePolicier.setGrade(policier.getGrade());
+            updatePolicier.setMatricule(policier.getMatricule());
+
+            policierRepository.saveAndFlush(updatePolicier);
+
+            return ResponseEntity.ok(new MessageResponse("Policier modifier avec succès !"));
+        }else {
+            return ResponseEntity.ok(new MessageResponse("cet policier n'existe pas !"));
+        }
+
+    }
+
+    @Override
+    public ResponseEntity<?> UpdatePolicierProfile(Long idappuser, Policier policier) {
+        if (policierRepository.findByIdappuser(idappuser) != null) {
+            Policier updatePolicierProfile = policierRepository.findById(idappuser).get();
+
+            updatePolicierProfile.setProfile(policier.getProfile());
+
+            policierRepository.saveAndFlush(updatePolicierProfile);
+            return ResponseEntity.ok(new MessageResponse("Profile modifier avec succès !"));
+        } else {
+            return ResponseEntity.ok(new MessageResponse("cet profile n'existe pas !"));
+        }
+    }
+
+    @Override
+    public MessageResponse supprimerPolicier(Long idappuser) {
+        if (policierRepository.findByIdappuser(idappuser) != null){
+            policierRepository.deleteById(idappuser);
+
+            MessageResponse message = new MessageResponse("Policier Supprimer avec succes");
+            return  message;
+        }else {
+            MessageResponse message = new MessageResponse("Cet Policier n'existe pas ");
+            return message;
+        }
+    }
+
+    @Override
+    public List<Policier> afficherPolicier() {
+
+        return policierRepository.findAll();
     }
 }

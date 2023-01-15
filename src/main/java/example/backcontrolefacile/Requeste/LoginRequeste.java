@@ -15,25 +15,25 @@ import javax.validation.constraints.NotBlank;
 public class LoginRequeste {
 
    // @NotBlank
-    private String nom;
+    private String telephone;
 
    // @NotBlank
     private String password;
 
-    /*public String getUsername() {
-        return username;
+    public String getTelephoneOrEmail() {
+        return telephone;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setTelephoneOrEmail(String telephoneOrEmail) {
+        this.telephone = telephone;
     }
 
-    public String getPassword() {
+   public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }*/
+    }
 
 }

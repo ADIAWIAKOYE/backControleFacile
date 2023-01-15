@@ -29,10 +29,16 @@ public class AppUser {
     private Long idappuser;
     private String nom;
     private String prenom;
-    private String adresse;
+    private String domicile;
     private String telephone;
     private String email;
     private String password;
+
+    private String profile;
+
+    private boolean etat;
+
+
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
@@ -44,7 +50,7 @@ public class AppUser {
     public AppUser(String nom, String prenom, String adresse, String telephone, String email, String password) {
         this.nom = nom;
         this.prenom = prenom;
-        this.adresse = adresse;
+        this.domicile = adresse;
         this.telephone = telephone;
         this.email = email;
         this.password = password;
