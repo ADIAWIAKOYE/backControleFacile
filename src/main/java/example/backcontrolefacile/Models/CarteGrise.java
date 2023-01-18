@@ -43,7 +43,13 @@ public class CarteGrise {
     private LocalDate dateecheance;
     private int ptac;
     private int pv;
+    private String status;
+    private String numserie;
 
-  /*  @OneToOne
-    private Vehicule vehicule;*/
+
+    @ManyToOne
+    private Utilisateur utilisateur;
+
+    @ManyToOne
+    private Vehicule vehicule;
 }

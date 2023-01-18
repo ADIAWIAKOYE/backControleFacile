@@ -23,31 +23,29 @@ public class VehiculeController {
     private VehiculeService vehiculeService;
 
 
-    @PostMapping("/save/{numcartegrise}")
-    public ResponseEntity<?> ajouterVehicule(@PathVariable ("numcartegrise") String numcartegrise,
-                                             @Param(value = "plaqueimatri") String plaqueimatri,
-                                             @Param(value = "couleur") String couleur,
-                                             @Param(value = "file") MultipartFile file) {
+    @PostMapping("/save")
+    public ResponseEntity<?> ajouterVehicule(@Param(value = "plaqueimatri") String plaqueimatri,
+                                             @Param(value = "couleur") String couleur) {
         Vehicule veh = new Vehicule();
-        String photoname = StringUtils.cleanPath(file.getOriginalFilename());
+      //  String photoname = StringUtils.cleanPath(file.getOriginalFilename());
         // Vehicule vehicule1 = null;
-        try {
+       // try {
             // vehicule1 = new JsonMapper().readValue(vehicul, Vehicule.class);
             veh.setCouleur(couleur);
             veh.setPlaqueimatri(plaqueimatri);
 
-            if (file != null) {
+           // if (file != null) {
                 //   System.out.println("ggggg");
-                veh.setPhotovehicule(SaveImage.save("vehicule", file, photoname));
-            }
-        }catch (Exception e) {
+            //    veh.setPhotovehicule(SaveImage.save("vehicule", file, photoname));
+           // }
+       // }catch (Exception e) {
             // TODO: handle exception
-        }
-        return vehiculeService.ajouterVehicule(veh, numcartegrise);
+       // }
+        return vehiculeService.ajouterVehicule(veh);
     }
 
 
-    @PutMapping("/update/{idvehicule}")
+/*    @PutMapping("/update/{idvehicule}")
     public MessageResponse updateVehicule(@PathVariable ("idvehicule") Long idvehicule,
                                           @Valid @RequestParam(value = "plaqueimatri") String plaqueimatri,
                                           @Valid @RequestParam(value = "couleur") String couleur,
@@ -69,7 +67,7 @@ public class VehiculeController {
         }
         return vehiculeService.UpdateVehicule(idvehicule, veh);
 
-    }
+    }*/
 
     @PutMapping("/updateImage/{idvehicule}")
     public MessageResponse updateVehiculeImage(@PathVariable ("idvehicule") Long idvehicule,
@@ -90,10 +88,10 @@ public class VehiculeController {
     }
 
 
-    @PutMapping("/updateSansImage/{idvehicule}")
+    @PutMapping("/update/{idvehicule}")
     public MessageResponse updateVehiculeSansImage(@PathVariable ("idvehicule") Long idvehicule, @RequestBody Vehicule vehicule) {
 
-        return vehiculeService.UpdateVehiculeSansImage(idvehicule, vehicule);
+        return vehiculeService.UpdateVehicule(idvehicule, vehicule);
     }
 
     @DeleteMapping("/supprimer/{idvehicule}")

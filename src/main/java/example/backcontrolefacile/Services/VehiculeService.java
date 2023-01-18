@@ -11,15 +11,14 @@ import java.util.List;
 
 public interface VehiculeService {
 
-    ResponseEntity<?> ajouterVehicule(Vehicule vehicule, String numcartegrise);
+    ResponseEntity<?> ajouterVehicule(Vehicule vehicule);
 
-    ResponseEntity<?> ajouterVehiculeI(Vehicule vehicule, String numcartegrise, String nom);
 
-    MessageResponse UpdateVehicule(Long idvehicule, Vehicule vehicule);
+  //  MessageResponse UpdateVehicule(Long idvehicule, Vehicule vehicule);
 
     MessageResponse UpdateVehiculeImage(Long idvehicule, Vehicule vehicule);
 
-    MessageResponse UpdateVehiculeSansImage(Long idvehicule, Vehicule vehicule);
+    MessageResponse UpdateVehicule(Long idvehicule, Vehicule vehicule);
 
     MessageResponse supprimerVehicule(Long idvehicule);
 
@@ -29,5 +28,5 @@ public interface VehiculeService {
 
     Vehicule vehiculeparplaque(String plaque);
 
-    MessageResponse addvehicule(Vehicule vehicule, Utilisateur utilisateur, CarteGrise carteGrise);
+
 }

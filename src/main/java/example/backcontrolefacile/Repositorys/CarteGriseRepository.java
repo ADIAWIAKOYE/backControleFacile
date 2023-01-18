@@ -14,5 +14,11 @@ public interface CarteGriseRepository extends JpaRepository<CarteGrise, Long> {
 
     CarteGrise findByIdcartegrise(Long idcartegrise);
 
+   List<CarteGrise> findByVehicule(Vehicule idvehicule);
+
+    CarteGrise findByVehiculeAndStatus(Vehicule idvehicule, String status);
+
   //  List<CarteGrise> findByVehicule(Vehicule idvehicule);
+
+
 }

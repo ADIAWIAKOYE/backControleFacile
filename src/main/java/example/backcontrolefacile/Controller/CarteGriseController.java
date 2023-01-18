@@ -1,12 +1,17 @@
 package example.backcontrolefacile.Controller;
 
+import com.google.zxing.WriterException;
 import example.backcontrolefacile.Models.CarteGrise;
+import example.backcontrolefacile.Models.Vehicule;
+import example.backcontrolefacile.Repositorys.CarteGriseRepository;
 import example.backcontrolefacile.Response.MessageResponse;
 import example.backcontrolefacile.Services.CarteGriseServise;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -16,11 +21,13 @@ public class CarteGriseController {
 
     @Autowired
     private CarteGriseServise carteGriseServise;
+    @Autowired
+    private CarteGriseRepository carteGriseRepository;
 
-    @PostMapping("/save")
-    public ResponseEntity<?> ajouterCarteGrise(CarteGrise carteGrise) {
+    @PostMapping("/save/{idvehiule}/{idapppuser}")
+    public ResponseEntity<?> ajouterCarteGrise(@RequestBody CarteGrise carteGrise, @PathVariable Long idvehiule, @PathVariable Long idapppuser) throws IOException, WriterException {
 
-        return carteGriseServise.ajouterCarteGrise(carteGrise);
+        return carteGriseServise.ajouterCarteGrise(carteGrise, idvehiule, idapppuser);
     }
 
     @PutMapping("/update/{idcartegrise}")
@@ -53,9 +60,25 @@ public class CarteGriseController {
         return carteGriseServise.CarteGriseParId(idcartegrise);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/afficherParNumero/{numcartegrise}")
     public CarteGrise CarteGriseParNumero(@PathVariable String numcartegrise) {
 
         return carteGriseServise.CarteGriseparnumero(numcartegrise);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/afficherParVehicule/{idvehicule}")
+    public List<CarteGrise> CarteGriseParVehicule(@PathVariable Vehicule idvehicule) {
+
+        return carteGriseServise.CarteGriseparvehicule(idvehicule);
+    }
+
+
+
+    @GetMapping("/vehiculeCart/{idvehicule}/{status}")
+    public CarteGrise CarteGriseParId(@PathVariable("idvehicule") Vehicule idcartegrise,@PathVariable("status") String status) {
+
+        return carteGriseRepository.findByVehiculeAndStatus(idcartegrise,status);
     }
 }

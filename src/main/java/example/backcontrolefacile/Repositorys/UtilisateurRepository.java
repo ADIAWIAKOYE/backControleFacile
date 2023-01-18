@@ -16,4 +16,6 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
     Utilisateur findByIdappuser(Long idappuser);
 
     Utilisateur findByEtat(boolean etat);
+
+    Utilisateur findByTelephone(String telephone);
 }

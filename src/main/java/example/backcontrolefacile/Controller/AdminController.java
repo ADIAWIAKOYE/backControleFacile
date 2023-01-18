@@ -1,6 +1,8 @@
 package example.backcontrolefacile.Controller;
 
 
+import com.google.zxing.WriterException;
+import example.backcontrolefacile.Configuration.QRCodeGenerator;
 import example.backcontrolefacile.Configuration.SaveImage;
 import example.backcontrolefacile.Models.*;
 import example.backcontrolefacile.Repositorys.UtilisateurRepository;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -89,91 +92,7 @@ public class AdminController {
     }
 
 
-
-    @PostMapping("/ajouterUtilisateurCartegriseVehicule")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> ajouterUtilisateurCartegriseVehicule(@Param(value = "nom") String nom, @Param(value = "prenom") String prenom, @Param(value = "adresse") String adresse, @Param(value = "password") String password,
-                                                                  @Param(value = "commune") String commune, @Param(value = "profession") String profession, @Param(value = "lieunaissance") String lieunaissance,
-                                                                  @Param(value = "datenaissance") LocalDate datenaissance, @Param(value = "telephone") String telephone, @Param(value = "fileUser") MultipartFile fileUser,
-
-                                                                  @Param(value = "plaqueimatri") String plaqueimatri,  @Param(value = "couleur") String couleur, @Param(value = "fileVehicule") MultipartFile fileVehicule,
-
-                                                                  @Param(value = "numcartegrise") String numcartegrise, @Param(value = "genre") String genre, @Param(value = "marque") String marque, @Param(value = "type") String type, @Param(value = "chassie") String chassie,
-                                                                  @Param(value = "carrouserie") String carrouserie, @Param(value = "capacite") String capacite, @Param(value = "nbplace") int nbplace, @Param(value = "coutunitaire") int coutunitaire,
-                                                                  @Param(value = "energie") String energie, @Param(value = "puissancereel") int puissancereel, @Param(value = "puissanceadmin") int puissanceadmin, @Param(value = "dpmc") LocalDate dpmc,
-                                                                  @Param(value = "datedelivrance") LocalDate datedelivrance, @Param(value = "dateecheance") LocalDate dateecheance, @Param(value = "ptac") int ptac, @Param(value = "pv") int pv) {
-        Utilisateur util = new Utilisateur();
-        Vehicule vehi = new Vehicule();
-        CarteGrise cg = new CarteGrise();
-        String photovehicule = StringUtils.cleanPath(fileVehicule.getOriginalFilename());
-        String photouser = StringUtils.cleanPath(fileUser.getOriginalFilename());
-        try {
-            util.setNom(nom);
-            util.setPrenom(prenom);
-            util.setDomicile(adresse);
-            util.setCommune(commune);
-            util.setProfession(profession);
-            util.setLieunaissance(lieunaissance);
-            util.setDatenaissance(datenaissance);
-            util.setTelephone(telephone);
-            util.setPassword(password);
-
-
-
-
-            cg.setNom(nom);
-            cg.setPrenom(prenom);
-            cg.setDomicile(adresse);
-            cg.setCommune(commune);
-            cg.setProfession(profession);
-            cg.setLieunaissance(lieunaissance);
-            cg.setDatenaissance(datenaissance);
-            cg.setNumcartegrise(numcartegrise);
-            cg.setGenre(genre);
-            cg.setMarque(marque);
-            cg.setType(type);
-            cg.setChassie(chassie);
-            cg.setCapacite(capacite);
-            cg.setCarrouserie(carrouserie);
-            cg.setCoutunitaire(coutunitaire);
-            cg.setNbplace(nbplace);
-            cg.setEnergie(energie);
-            cg.setPuissancereel(puissancereel);
-            cg.setPuissanceadmin(puissanceadmin);
-            cg.setDpmc(dpmc);
-            cg.setDatedelivrance(datedelivrance);
-            cg.setDateecheance(dateecheance);
-            cg.setPtac(ptac);
-            cg.setPv(pv);
-
-
-            vehi.setCarteGrise(cg);
-            vehi.setUtilisateur(util);
-            vehi.setCouleur(couleur);
-            vehi.setPlaqueimatri(plaqueimatri);
-
-            if (fileUser != null) {
-                util.setProfile(SaveImage.save("user", fileUser, photouser));
-            }
-
-            if (fileUser != null) {
-                vehi.setPhotovehicule(SaveImage.save("vehicule", fileUser, photovehicule));
-            }
-
-        }catch (Exception e) {
-            // TODO: handle exception
-        }
-
-        //ResponseEntity<?> tt = utilisateurService.ajouterUtilisateur(util);
-        vehi.setUtilisateur(utilisateurService.ajouter(util));
-        vehi.setCarteGrise(carteGriseServise.ajouterCG(cg));
-        return vehiculeService.ajouterVehiculeI(vehi, numcartegrise, nom);
-    }
-
-
-
-
-
+    String maneqr;
 
     @PostMapping("/ajouterUtilisateurCartegriseVehicule2")
     @PreAuthorize("hasRole('ADMIN')")
@@ -186,12 +105,11 @@ public class AdminController {
                                                                   @Param(value = "numcartegrise") String numcartegrise, @Param(value = "genre") String genre, @Param(value = "marque") String marque, @Param(value = "type") String type, @Param(value = "chassie") String chassie,
                                                                   @Param(value = "carrouserie") String carrouserie, @Param(value = "capacite") String capacite, @Param(value = "nbplace") int nbplace, @Param(value = "coutunitaire") int coutunitaire,
                                                                   @Param(value = "energie") String energie, @Param(value = "puissancereel") int puissancereel, @Param(value = "puissanceadmin") int puissanceadmin, @Param(value = "dpmc") LocalDate dpmc,
-                                                                  @Param(value = "datedelivrance") LocalDate datedelivrance, @Param(value = "dateecheance") LocalDate dateecheance, @Param(value = "ptac") int ptac, @Param(value = "pv") int pv) {
+                                                                  @Param(value = "datedelivrance") LocalDate datedelivrance, @Param(value = "dateecheance") LocalDate dateecheance, @Param(value = "ptac") int ptac, @Param(value = "pv") int pv) throws IOException, WriterException {
         Utilisateur util = new Utilisateur();
         Vehicule vehi = new Vehicule();
         CarteGrise cg = new CarteGrise();
-        /*String photovehicule = StringUtils.cleanPath(fileVehicule.getOriginalFilename());
-        String photouser = StringUtils.cleanPath(fileUser.getOriginalFilename());*/
+
         try {
             util.setNom(nom);
             util.setPrenom(prenom);
@@ -232,27 +150,27 @@ public class AdminController {
             cg.setPv(pv);
 
 
-            vehi.setCarteGrise(cg);
-            vehi.setUtilisateur(util);
+            /*vehi.setCarteGrise(cg);
+            vehi.setUtilisateur(util);*/
             vehi.setCouleur(couleur);
             vehi.setPlaqueimatri(plaqueimatri);
 
-           /* if (fileUser != null) {
-                util.setProfile(SaveImage.save("user", fileUser, photouser));
-            }
-
-            if (fileUser != null) {
-                vehi.setPhotovehicule(SaveImage.save("vehicule", fileUser, photovehicule));
-            }*/
+            cg.setNumserie("Nom : "+nom+"\n"+"Prenom : "+prenom+"\n"+"Date de naissance : "+datenaissance+"\n"+
+                    "Profession : "+profession+"\n"+"Commune : "+commune+"\n"+"Telephone : "+telephone+"\n"+
+                    "Plaque d'ummatriculation:"+plaqueimatri+"\n"+ "Numerode la carte grise : "+numcartegrise+"\n"+
+                    "Genre : "+genre+"\n"+"Marque : "+marque+"\n"+"Chassie : "+chassie+"\n"+"Carrosserie : "+carrouserie+"\n"+
+                    "Type : "+type+"\n"+"Capacite : "+capacite+"\n"+"Nombre de place : "+nbplace+"\n"+
+                    "Energie : "+energie+"\n"+"Cout unitaire : "+coutunitaire+"\n"+"Puissance Admin : "+puissanceadmin+"\n"+
+                    "Puissance Reél : "+puissancereel+"\n"+ "Validé du "+datedelivrance+" au "+dateecheance+"\n"+
+                    "Date de premiere mise en circulation : "+dpmc+"\n"+"D P A C  : "+ptac+"\n"+ " P V  : "+pv);
+            maneqr = vehi.getPlaqueimatri();
+            String  imagepath = "./src/main/resources/qrcodes/"+maneqr+".png";
+            QRCodeGenerator.generateQRCodeImage(cg.getNumserie(), 250, 250, imagepath);
 
         }catch (Exception e) {
             // TODO: handle exception
         }
-
-        //ResponseEntity<?> tt = utilisateurService.ajouterUtilisateur(util);
-        //vehi.setUtilisateur(utilisateurService.ajouter(util));
-       // vehi.setCarteGrise(carteGriseServise.ajouterCG(cg));
-        return vehiculeService.addvehicule(vehi, util, cg);
+        return carteGriseServise.addCarteGrise(cg, vehi, util);
     }
 
 }

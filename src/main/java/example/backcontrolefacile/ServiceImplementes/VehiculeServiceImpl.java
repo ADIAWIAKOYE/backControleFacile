@@ -36,41 +36,19 @@ public class VehiculeServiceImpl implements VehiculeService {
     PasswordEncoder encoder;
 
     @Override
-    public ResponseEntity<?> ajouterVehicule(Vehicule vehicule, String numcartegrise) {
-        if (carteGriseRepository.findByNumcartegrise(numcartegrise) == null){
-            return ResponseEntity.ok(new MessageResponse("La carte grise n'existe pas !"));
-        }
+    public ResponseEntity<?> ajouterVehicule(Vehicule vehicule) {
         if (vehiculeRepository.existsByPlaqueimatri(vehicule.getPlaqueimatri())) {
             return  ResponseEntity.badRequest().body(new MessageResponse("Error: Cet véhicule existe déjà !"));
             // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
         }
-        CarteGrise carteGrise = carteGriseRepository.findByNumcartegrise(numcartegrise);
-        vehicule.setCarteGrise(carteGrise);
+        vehicule.setPhotovehicule("http://127.0.0.1/controleFacile/images/utilisateur/vehicule.png");
         vehiculeRepository.save(vehicule);
         return ResponseEntity.ok(new MessageResponse("Vehicule enregistre avec succes !"));
 
     }
 
 
-    @Override
-    public ResponseEntity<?> ajouterVehiculeI(Vehicule vehicule, String numcartegrise, String nom) {
-        if (carteGriseRepository.findByNumcartegrise(numcartegrise) == null){
-            return ResponseEntity.ok(new MessageResponse("La carte grise n'existe pas !"));
-        }
-        if (vehiculeRepository.existsByPlaqueimatri(vehicule.getPlaqueimatri())) {
-            return  ResponseEntity.badRequest().body(new MessageResponse("Error: Cet véhicule existe déjà !"));
-            // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
-        }
-        CarteGrise carteGrise = carteGriseRepository.findByNumcartegrise(numcartegrise);
-        vehicule.setCarteGrise(carteGrise);
-        Utilisateur utilisateur = utilisateurRepository.findByNom(nom);
-        vehicule.setUtilisateur(utilisateur);
-        vehiculeRepository.save(vehicule);
-        return ResponseEntity.ok(new MessageResponse("Vehicule enregistre avec succes !"));
-
-    }
-
-    @Override
+/*    @Override
     public MessageResponse UpdateVehicule(Long idvehicule, Vehicule vehicule) {
 
         if (vehiculeRepository.findByIdvehicule(idvehicule) != null){
@@ -87,7 +65,7 @@ public class VehiculeServiceImpl implements VehiculeService {
             MessageResponse message = new MessageResponse("Cet vehicule n'existe pas ");
             return message;
         }
-    }
+    }*/
 
     @Override
     public MessageResponse UpdateVehiculeImage(Long idvehicule, Vehicule vehicule) {
@@ -106,7 +84,7 @@ public class VehiculeServiceImpl implements VehiculeService {
     }
 
     @Override
-    public MessageResponse UpdateVehiculeSansImage(Long idvehicule, Vehicule vehicule) {
+    public MessageResponse UpdateVehicule(Long idvehicule, Vehicule vehicule) {
         if (vehiculeRepository.findByIdvehicule(idvehicule) != null){
             Vehicule updateVehicule = vehiculeRepository.findById(idvehicule).get();
             updateVehicule.setPlaqueimatri(vehicule.getPlaqueimatri());
@@ -158,7 +136,7 @@ public class VehiculeServiceImpl implements VehiculeService {
         return null;
     }
 
-    @Override
+/*    @Override
     public MessageResponse addvehicule(Vehicule vehicule, Utilisateur utilisateur, CarteGrise carteGrise) {
         if (utilisateurRepository.existsByTelephone(utilisateur.getTelephone())) {
 
@@ -193,6 +171,7 @@ public class VehiculeServiceImpl implements VehiculeService {
              else {
                 vehicule.setPhotovehicule("http://127.0.0.1/controleFacile/images/utilisateur/vehicule.png");
                 vehicule.setCarteGrise(carteGriseRepository.save(carteGrise));
+                vehicule.setNumserie(encoder.encode(vehicule.getNumserie()));
                 //Utilisateur utilisateur = utilisateurRepository.findByNom(nom);
                 vehicule.setUtilisateur(utilisateurRepository.save(utilisateur));
                 vehiculeRepository.save(vehicule);
@@ -205,5 +184,5 @@ public class VehiculeServiceImpl implements VehiculeService {
             }
 
         }
-    }
+    }*/
 }

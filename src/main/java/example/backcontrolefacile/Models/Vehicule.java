@@ -29,9 +29,8 @@ public class Vehicule {
     private String couleur;
 
 
-   @ManyToOne
-   private Utilisateur utilisateur;
 
-   @OneToOne
-    private CarteGrise carteGrise;
+
+
+
 }
