@@ -1,4 +1,4 @@
-package example.backcontrolefacile.ServiceImplementes;
+ package example.backcontrolefacile.ServiceImplementes;
 
 import example.backcontrolefacile.Models.Admin;
 import example.backcontrolefacile.Models.AppRole;
@@ -54,6 +54,7 @@ public class AdminServiceImpl implements AdminService {
         System.out.println("erttrtdtrtretretr"+roles);
         admin.setRoles(roles);
         admin.setEtat(true);
+        admin.setProfile("http://127.0.0.1/controleFacile/images/utilisateur/icone.png");
         admin.setPassword(encoder.encode(admin.getPassword()));
         adminRepository.save(admin);
         return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès !"));

@@ -89,6 +89,18 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
+    public ResponseEntity<?> ModifierUtilisateur(Long idappuser,  Utilisateur utilisateur) {
+          // Utilisateur utilisateur = new Utilisateur();
+            Utilisateur updateUtilisateur = utilisateurRepository.findById(idappuser).get();
+            utilisateur.setEtat(true);
+            updateUtilisateur.setPassword(encoder.encode(utilisateur.getPassword()));
+       // utilisateur.setPassword(encoder.encode(utilisateur.getPassword()));
+            utilisateurRepository.save(updateUtilisateur);
+
+        return ResponseEntity.ok(new MessageResponse("Utilisateur modifier avec succès !"));
+    }
+
+    @Override
     public ResponseEntity<?> UpdateUtilisateurProfile(Long idappuser, Utilisateur utilisateur) {
         if (utilisateurRepository.findByIdappuser(idappuser) != null) {
             Utilisateur updateUtilisateurProfile = utilisateurRepository.findById(idappuser).get();
@@ -126,7 +138,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return null;
     }
 
-
+    public List<CarteGrise> findByUtilisateur(Long id) {
+        Utilisateur utilisateur = utilisateurRepository.findById(id).get();
+        return utilisateurRepository.findByUtilisateur(utilisateur);
+    }
 
 
 }

@@ -52,4 +52,8 @@ public class CarteGrise {
 
     @ManyToOne
     private Vehicule vehicule;
+
+    public boolean isPresent() {
+        return true;
+    }
 }

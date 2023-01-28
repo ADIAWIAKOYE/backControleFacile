@@ -18,4 +18,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> findByTelephone(String telephone);
 
     Optional<AppUser> findByTelephoneOrEmail(String telephone, String email);
+
+    AppUser findByIdappuser(Long idappuser);
 }

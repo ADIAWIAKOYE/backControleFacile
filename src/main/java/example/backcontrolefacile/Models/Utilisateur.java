@@ -4,11 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "utilisateur")
@@ -31,4 +30,18 @@ public class Utilisateur extends AppUser {
 
     @OneToOne
     private Permis permis;
+
+
+  /*  @ElementCollection
+    private List<String> carteGriseNumbers;*/
+
+//    @OneToMany(mappedBy="utilisateur")
+//    private List<CarteGrise> carteGriseList=new ArrayList<>();
+
+//    @OneToMany(cascade = CascadeType.ALL)
+//    private List<CarteGrise> carteGriseList;
+
+    public boolean isPresent() {
+        return true;
+    }
 }

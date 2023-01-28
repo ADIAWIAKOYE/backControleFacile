@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public interface CarteGriseServise {
 
@@ -30,4 +31,5 @@ public interface CarteGriseServise {
       CarteGrise CarteGriseValideparvehicule(Long idvehicule, String status);
 
     MessageResponse addCarteGrise(CarteGrise carteGrise, Vehicule vehicule, Utilisateur utilisateur) throws IOException, WriterException;
+    MessageResponse addVCarteGrise(CarteGrise carteGrise, Vehicule vehicule, String telephone);
 }

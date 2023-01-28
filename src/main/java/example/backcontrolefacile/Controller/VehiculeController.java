@@ -123,4 +123,9 @@ public class VehiculeController {
 
         return vehiculeService.vehiculeparplaque(plaque);
     }
+
+    @GetMapping("/user/{userId}")
+    public List<Vehicule> getVehiclesByUserId(@PathVariable Long userId) {
+        return vehiculeService.findByUserId(userId);
+    }
 }

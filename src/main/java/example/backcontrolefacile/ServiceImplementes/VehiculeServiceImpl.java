@@ -41,7 +41,7 @@ public class VehiculeServiceImpl implements VehiculeService {
             return  ResponseEntity.badRequest().body(new MessageResponse("Error: Cet véhicule existe déjà !"));
             // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
         }
-        vehicule.setPhotovehicule("http://127.0.0.1/controleFacile/images/utilisateur/vehicule.png");
+        vehicule.setPhotovehicule("http://127.0.0.1/controleFacile/images/vehicule/vehicule.png");
         vehiculeRepository.save(vehicule);
         return ResponseEntity.ok(new MessageResponse("Vehicule enregistre avec succes !"));
 
@@ -134,6 +134,11 @@ public class VehiculeServiceImpl implements VehiculeService {
         }
 
         return null;
+    }
+
+    public List<Vehicule> findByUserId(Long userId) {
+
+        return utilisateurRepository.findVehiculesByIdappuser(userId);
     }
 
 /*    @Override

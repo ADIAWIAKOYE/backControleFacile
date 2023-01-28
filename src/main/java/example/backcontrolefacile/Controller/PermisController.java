@@ -25,15 +25,23 @@ public class PermisController {
     private PermisServise permisServise;
 
     @PostMapping("/save")
-    public ResponseEntity<?> ajouterPermis(@Param("numpermis") String numpermis,
-                                             @Param("categoriepermis") String categoriepermis,
-                                             @Param("datedelivrance") LocalDate datedelivrance,
-                                             @Param("dateecheance") LocalDate dateecheance,
-                                             @Param("file") MultipartFile file) {
+    public ResponseEntity<?> ajouterPermis(@Param("nom") String nom, @Param("prenom") String prenom, @Param("adresse") String adresse,
+                                           @Param("commune") String commune, @Param("profession") String profession,
+                                           @Param("lieunaissance") String lieunaissance, @Param("datenaissance") LocalDate datenaissance,
+                                           @Param("numpermis") String numpermis, @Param("categoriepermis") String categoriepermis,
+                                           @Param("datedelivrance") LocalDate datedelivrance, @Param("dateecheance") LocalDate dateecheance,
+                                           @Param("file") MultipartFile file) {
         Permis perm = new Permis();
         String photoname = StringUtils.cleanPath(file.getOriginalFilename());
         try {
 
+            perm.setDomicile(adresse);
+            perm.setNom(nom);
+            perm.setPrenom(prenom);
+            perm.setCommune(commune);
+            perm.setLieunaissance(lieunaissance);
+            perm.setDatenaissance(datenaissance);
+            perm.setProfession(profession);
             perm.setNumpermis(numpermis);
             perm.setCategoriepermis(categoriepermis);
             perm.setDatedelivrance(datedelivrance);

@@ -2,6 +2,7 @@ package example.backcontrolefacile.Controller;
 
 import com.google.zxing.WriterException;
 import example.backcontrolefacile.Models.CarteGrise;
+import example.backcontrolefacile.Models.Utilisateur;
 import example.backcontrolefacile.Models.Vehicule;
 import example.backcontrolefacile.Repositorys.CarteGriseRepository;
 import example.backcontrolefacile.Response.MessageResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -80,5 +82,16 @@ public class CarteGriseController {
     public CarteGrise CarteGriseParId(@PathVariable("idvehicule") Vehicule idcartegrise,@PathVariable("status") String status) {
 
         return carteGriseRepository.findByVehiculeAndStatus(idcartegrise,status);
+    }
+
+    @GetMapping("/vehiculeCar/{idappuser}")
+    public CarteGrise cartegriseParUser(@PathVariable Long idappuser){
+        return carteGriseRepository.findByUtilisateur(idappuser);
+    }
+
+
+    @GetMapping("/vehiculeCarvehicule/{idvehicule}")
+    public CarteGrise cartegriseParvehicule(@PathVariable Long idvehicule){
+        return carteGriseRepository.findValidatedCarteGriseByVehiculeId(idvehicule);
     }
 }

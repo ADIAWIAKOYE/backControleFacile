@@ -28,5 +28,5 @@ public interface VehiculeService {
 
     Vehicule vehiculeparplaque(String plaque);
 
-
+    List<Vehicule> findByUserId(Long userId);
 }

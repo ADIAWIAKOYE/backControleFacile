@@ -5,6 +5,7 @@ import com.google.zxing.WriterException;
 import example.backcontrolefacile.Configuration.QRCodeGenerator;
 import example.backcontrolefacile.Configuration.SaveImage;
 import example.backcontrolefacile.Models.*;
+import example.backcontrolefacile.Repositorys.PermisRepository;
 import example.backcontrolefacile.Repositorys.UtilisateurRepository;
 import example.backcontrolefacile.Response.MessageResponse;
 import example.backcontrolefacile.Services.AdminService;
@@ -93,10 +94,12 @@ public class AdminController {
 
 
     String maneqr;
+    @Autowired
+    private PermisRepository permisRepository;
 
-    @PostMapping("/ajouterUtilisateurCartegriseVehicule2")
+    @PostMapping("/ajouterUtilisateurCartegriseVehicule2/{numpermi}")
     @PreAuthorize("hasRole('ADMIN')")
-    public MessageResponse ajouterUtilisateurCartegriseVehicule2(@Param(value = "nom") String nom, @Param(value = "prenom") String prenom, @Param(value = "adresse") String adresse, @Param(value = "password") String password,
+    public MessageResponse ajouterUtilisateurCartegriseVehicule2(@PathVariable(value = "numpermi") String numpermi, @Param(value = "nom") String nom, @Param(value = "prenom") String prenom, @Param(value = "adresse") String adresse, @Param(value = "password") String password,
                                                                   @Param(value = "commune") String commune, @Param(value = "profession") String profession, @Param(value = "lieunaissance") String lieunaissance,
                                                                   @Param(value = "datenaissance") LocalDate datenaissance, @Param(value = "telephone") String telephone,
 
@@ -109,68 +112,156 @@ public class AdminController {
         Utilisateur util = new Utilisateur();
         Vehicule vehi = new Vehicule();
         CarteGrise cg = new CarteGrise();
-
-        try {
-            util.setNom(nom);
-            util.setPrenom(prenom);
-            util.setDomicile(adresse);
-            util.setCommune(commune);
-            util.setProfession(profession);
-            util.setLieunaissance(lieunaissance);
-            util.setDatenaissance(datenaissance);
-            util.setTelephone(telephone);
-            util.setPassword(password);
+        if (permisRepository.findByNumpermis(numpermi) == null){
+            MessageResponse message = new MessageResponse("Cet numero de Permis n'existe pas ");
+            return message;
+        }else {
+            Permis permis = permisRepository.findByNumpermis(numpermi);
 
 
+            try {
+                util.setNom(nom);
+                util.setPrenom(prenom);
+                util.setDomicile(adresse);
+                util.setCommune(commune);
+                util.setProfession(profession);
+                util.setLieunaissance(lieunaissance);
+                util.setDatenaissance(datenaissance);
+                util.setTelephone(telephone);
+                util.setPassword(password);
+                util.setPermis(permis);
 
 
-            cg.setNom(nom);
-            cg.setPrenom(prenom);
-            cg.setDomicile(adresse);
-            cg.setCommune(commune);
-            cg.setProfession(profession);
-            cg.setLieunaissance(lieunaissance);
-            cg.setDatenaissance(datenaissance);
-            cg.setNumcartegrise(numcartegrise);
-            cg.setGenre(genre);
-            cg.setMarque(marque);
-            cg.setType(type);
-            cg.setChassie(chassie);
-            cg.setCapacite(capacite);
-            cg.setCarrouserie(carrouserie);
-            cg.setCoutunitaire(coutunitaire);
-            cg.setNbplace(nbplace);
-            cg.setEnergie(energie);
-            cg.setPuissancereel(puissancereel);
-            cg.setPuissanceadmin(puissanceadmin);
-            cg.setDpmc(dpmc);
-            cg.setDatedelivrance(datedelivrance);
-            cg.setDateecheance(dateecheance);
-            cg.setPtac(ptac);
-            cg.setPv(pv);
+
+
+                cg.setNom(nom);
+                cg.setPrenom(prenom);
+                cg.setDomicile(adresse);
+                cg.setCommune(commune);
+                cg.setProfession(profession);
+                cg.setLieunaissance(lieunaissance);
+                cg.setDatenaissance(datenaissance);
+                cg.setNumcartegrise(numcartegrise);
+                cg.setGenre(genre);
+                cg.setMarque(marque);
+                cg.setType(type);
+                cg.setChassie(chassie);
+                cg.setCapacite(capacite);
+                cg.setCarrouserie(carrouserie);
+                cg.setCoutunitaire(coutunitaire);
+                cg.setNbplace(nbplace);
+                cg.setEnergie(energie);
+                cg.setPuissancereel(puissancereel);
+                cg.setPuissanceadmin(puissanceadmin);
+                cg.setDpmc(dpmc);
+                cg.setDatedelivrance(datedelivrance);
+                cg.setDateecheance(dateecheance);
+                cg.setPtac(ptac);
+                cg.setPv(pv);
 
 
             /*vehi.setCarteGrise(cg);
             vehi.setUtilisateur(util);*/
-            vehi.setCouleur(couleur);
-            vehi.setPlaqueimatri(plaqueimatri);
+                vehi.setCouleur(couleur);
+                vehi.setPlaqueimatri(plaqueimatri);
 
-            cg.setNumserie("Nom : "+nom+"\n"+"Prenom : "+prenom+"\n"+"Date de naissance : "+datenaissance+"\n"+
-                    "Profession : "+profession+"\n"+"Commune : "+commune+"\n"+"Telephone : "+telephone+"\n"+
-                    "Plaque d'ummatriculation:"+plaqueimatri+"\n"+ "Numerode la carte grise : "+numcartegrise+"\n"+
-                    "Genre : "+genre+"\n"+"Marque : "+marque+"\n"+"Chassie : "+chassie+"\n"+"Carrosserie : "+carrouserie+"\n"+
-                    "Type : "+type+"\n"+"Capacite : "+capacite+"\n"+"Nombre de place : "+nbplace+"\n"+
-                    "Energie : "+energie+"\n"+"Cout unitaire : "+coutunitaire+"\n"+"Puissance Admin : "+puissanceadmin+"\n"+
-                    "Puissance Reél : "+puissancereel+"\n"+ "Validé du "+datedelivrance+" au "+dateecheance+"\n"+
-                    "Date de premiere mise en circulation : "+dpmc+"\n"+"D P A C  : "+ptac+"\n"+ " P V  : "+pv);
-            maneqr = vehi.getPlaqueimatri();
-            String  imagepath = "./src/main/resources/qrcodes/"+maneqr+".png";
-            QRCodeGenerator.generateQRCodeImage(cg.getNumserie(), 250, 250, imagepath);
+                cg.setNumserie("Nom : "+nom+"\n"+"Prenom : "+prenom+"\n"+"Date de naissance : "+datenaissance+"\n"+
+                        "Profession : "+profession+"\n"+"Commune : "+commune+"\n"+"Telephone : "+telephone+"\n"+
+                        "Plaque d'ummatriculation:"+plaqueimatri+"\n"+ "Numerode la carte grise : "+numcartegrise+"\n"+
+                        "Genre : "+genre+"\n"+"Marque : "+marque+"\n"+"Chassie : "+chassie+"\n"+"Carrosserie : "+carrouserie+"\n"+
+                        "Type : "+type+"\n"+"Capacite : "+capacite+"\n"+"Nombre de place : "+nbplace+"\n"+
+                        "Energie : "+energie+"\n"+"Cout unitaire : "+coutunitaire+"\n"+"Puissance Admin : "+puissanceadmin+"\n"+
+                        "Puissance Reél : "+puissancereel+"\n"+ "Validé du "+datedelivrance+" au "+dateecheance+"\n"+
+                        "Date de premiere mise en circulation : "+dpmc+"\n"+"D P A C  : "+ptac+"\n"+ " P V  : "+pv);
+                maneqr = vehi.getPlaqueimatri();
+                String  imagepath = "./src/main/resources/qrcodes/"+maneqr+".png";
+                QRCodeGenerator.generateQRCodeImage(cg.getNumserie(), 250, 250, imagepath);
 
-        }catch (Exception e) {
-            // TODO: handle exception
+            }catch (Exception e) {
+                // TODO: handle exception
+            }
+            return carteGriseServise.addCarteGrise(cg, vehi, util);
         }
-        return carteGriseServise.addCarteGrise(cg, vehi, util);
+
+    }
+
+
+
+
+    @PostMapping("/ajouterCartegriseVehicule2/{telephone}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public MessageResponse ajouterCartegriseVehicule2(@PathVariable(value = "telephone") String telephone, @Param(value = "nom") String nom, @Param(value = "prenom") String prenom, @Param(value = "adresse") String adresse,
+                                                                 @Param(value = "commune") String commune, @Param(value = "profession") String profession, @Param(value = "lieunaissance") String lieunaissance,
+                                                                 @Param(value = "datenaissance") LocalDate datenaissance,
+
+                                                                 @Param(value = "plaqueimatri") String plaqueimatri,  @Param(value = "couleur") String couleur,
+
+                                                                 @Param(value = "numcartegrise") String numcartegrise, @Param(value = "genre") String genre, @Param(value = "marque") String marque, @Param(value = "type") String type, @Param(value = "chassie") String chassie,
+                                                                 @Param(value = "carrouserie") String carrouserie, @Param(value = "capacite") String capacite, @Param(value = "nbplace") int nbplace, @Param(value = "coutunitaire") int coutunitaire,
+                                                                 @Param(value = "energie") String energie, @Param(value = "puissancereel") int puissancereel, @Param(value = "puissanceadmin") int puissanceadmin, @Param(value = "dpmc") LocalDate dpmc,
+                                                                 @Param(value = "datedelivrance") LocalDate datedelivrance, @Param(value = "dateecheance") LocalDate dateecheance, @Param(value = "ptac") int ptac, @Param(value = "pv") int pv) {
+        Vehicule vehi = new Vehicule();
+        CarteGrise cg = new CarteGrise();
+        if (utilisateurRepository.findByTelephone(telephone) == null){
+            MessageResponse message = new MessageResponse("Cet numero de Permis n'existe pas ");
+            return message;
+        }else {
+
+            Utilisateur utilisateur = utilisateurRepository.findByTelephone(telephone);
+
+
+            try {
+
+                cg.setNom(nom);
+                cg.setPrenom(prenom);
+                cg.setDomicile(adresse);
+                cg.setCommune(commune);
+                cg.setProfession(profession);
+                cg.setLieunaissance(lieunaissance);
+                cg.setDatenaissance(datenaissance);
+                cg.setNumcartegrise(numcartegrise);
+                cg.setGenre(genre);
+                cg.setMarque(marque);
+                cg.setType(type);
+                cg.setChassie(chassie);
+                cg.setCapacite(capacite);
+                cg.setCarrouserie(carrouserie);
+                cg.setCoutunitaire(coutunitaire);
+                cg.setNbplace(nbplace);
+                cg.setEnergie(energie);
+                cg.setPuissancereel(puissancereel);
+                cg.setPuissanceadmin(puissanceadmin);
+                cg.setDpmc(dpmc);
+                cg.setDatedelivrance(datedelivrance);
+                cg.setDateecheance(dateecheance);
+                cg.setPtac(ptac);
+                cg.setPv(pv);
+                cg.setUtilisateur(utilisateur);
+
+
+            /*vehi.setCarteGrise(cg);
+            vehi.setUtilisateur(util);*/
+                vehi.setCouleur(couleur);
+                vehi.setPlaqueimatri(plaqueimatri);
+
+                cg.setNumserie("Nom : "+nom+"\n"+"Prenom : "+prenom+"\n"+"Date de naissance : "+datenaissance+"\n"+
+                        "Profession : "+profession+"\n"+"Commune : "+commune+"\n"+"Telephone : "+telephone+"\n"+
+                        "Plaque d'ummatriculation:"+plaqueimatri+"\n"+ "Numerode la carte grise : "+numcartegrise+"\n"+
+                        "Genre : "+genre+"\n"+"Marque : "+marque+"\n"+"Chassie : "+chassie+"\n"+"Carrosserie : "+carrouserie+"\n"+
+                        "Type : "+type+"\n"+"Capacite : "+capacite+"\n"+"Nombre de place : "+nbplace+"\n"+
+                        "Energie : "+energie+"\n"+"Cout unitaire : "+coutunitaire+"\n"+"Puissance Admin : "+puissanceadmin+"\n"+
+                        "Puissance Reél : "+puissancereel+"\n"+ "Validé du "+datedelivrance+" au "+dateecheance+"\n"+
+                        "Date de premiere mise en circulation : "+dpmc+"\n"+"D P A C  : "+ptac+"\n"+ " P V  : "+pv);
+                maneqr = vehi.getPlaqueimatri();
+                String  imagepath = "./src/main/resources/qrcodes/"+maneqr+".png";
+                QRCodeGenerator.generateQRCodeImage(cg.getNumserie(), 250, 250, imagepath);
+
+            }catch (Exception e) {
+                // TODO: handle exception
+            }
+            return carteGriseServise.addVCarteGrise(cg, vehi, telephone);
+        }
+
     }
 
 }

@@ -194,6 +194,38 @@ public class AuthController {
 
 
 
+    @PostMapping("/sinuPoliceII")
+    public ResponseEntity<?> ajouterPolicierII(@Param(value = "nom") String nom, @Param(value = "prenom") String prenom, @Param(value = "adresse") String adresse,
+                                               @Param(value = "telephone") String telephone, @Param(value = "email") String email, @Param(value = "password") String password,
+                                               @Param(value = "matricule") String matricule, @Param(value = "grade") String grade) {
+        Policier pol = new Policier();
+//        String photoname = StringUtils.cleanPath(file.getOriginalFilename());
+        try {
+            pol.setNom(nom);
+            pol.setPrenom(prenom);
+            pol.setDomicile(adresse);
+            pol.setTelephone(telephone);
+            pol.setEmail(email);
+            pol.setPassword(password);
+            pol.setMatricule(matricule);
+            pol.setGrade(grade);
+
+//            if (file != null) {
+//
+//                pol.setProfile(SaveImage.save("user", file, photoname));
+//            }
+
+        }catch (Exception e) {
+            // TODO: handle exception
+        }
+        return policierService.ajouterPolicier(pol);
+    }
+
+
+
+
+
+
 
 /*    @PostMapping("/sinuPolice")
     public ResponseEntity<?> ajouterPolicier(@RequestBody Policier policier) {
@@ -270,7 +302,7 @@ public class AuthController {
     }*/
 
     @PostMapping("/sinudminI")
-    public Admin ajouteAdminI(@Param(value = "nom") String nom, @Param(value = "prenom") String prenom, @Param(value = "adresse") String adresse,
+    public ResponseEntity<?> ajouteAdminI(@Param(value = "nom") String nom, @Param(value = "prenom") String prenom, @Param(value = "adresse") String adresse,
                                            @Param(value = "telephone") String telephone, @Param(value = "email") String email, @Param(value = "password") String password
                                            ) {
         Admin adm = new Admin();
@@ -291,7 +323,7 @@ public class AuthController {
         }catch (Exception e) {
             // TODO: handle exception
         }
-        return adminService.addAdmin(adm);
+        return adminService.ajouterAdmin(adm);
     }
 
 }

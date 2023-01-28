@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.Base64;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -53,14 +55,19 @@ public class WebSecurityConfig{
         return new BCryptPasswordEncoder();
     }
 
+
+   // public Base64.Decoder decoder;
+
    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**").permitAll()
-                //.antMatchers("/api/admin/**").permitAll()
+                .antMatchers("/api/v1/sms/**").permitAll()
+                .antMatchers("/api/cartegrise/**").permitAll()
+                .antMatchers("/api/utilisateur/**").permitAll()
+                .antMatchers("/api/vehicule/**").permitAll()
                 //.authorizeHttpRequests().requestMatchers("/api/auth/**").permitAll()
                 //.antMatchers("/api/test/**").permitAll()
                 .anyRequest().authenticated();

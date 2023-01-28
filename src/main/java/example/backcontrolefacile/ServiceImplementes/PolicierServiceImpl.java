@@ -54,6 +54,7 @@ public class PolicierServiceImpl implements PolicierService {
         System.out.println("erttrtdtrtretretr"+roles);
         policier.setRoles(roles);
         policier.setEtat(true);
+        policier.setProfile("http://127.0.0.1/controleFacile/images/utilisateur/icone.png");
         policier.setPassword(encoder.encode(policier.getPassword()));
         policierRepository.save(policier);
         return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès !"));

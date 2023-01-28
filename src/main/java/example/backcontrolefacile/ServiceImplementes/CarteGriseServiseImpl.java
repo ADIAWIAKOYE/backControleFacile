@@ -15,10 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CarteGriseServiseImpl implements CarteGriseServise {
@@ -218,7 +215,7 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
             return message;
             // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
         }else {
-            vehicule.setPhotovehicule("http://127.0.0.1/controleFacile/images/utilisateur/vehicule.png");
+            vehicule.setPhotovehicule("http://127.0.0.1/controleFacile/images/vehicule/vehicule.png");
         } if (carteGriseRepository.findByNumcartegrise(carteGrise.getNumcartegrise()) != null) {
 
             MessageResponse message = new MessageResponse("Error: cette carte grise existe déjà !");
@@ -247,5 +244,46 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
             MessageResponse message = new MessageResponse(" votre carte grise est enregistre avec succes !");
             return message;
         }
+    }
+
+    @Override
+    public MessageResponse addVCarteGrise(CarteGrise carteGrise, Vehicule vehicule, String telephone){
+
+        if (vehiculeRepository.existsByPlaqueimatri(vehicule.getPlaqueimatri())) {
+            MessageResponse message = new MessageResponse("Error: Cet véhicule existe déjà !");
+            return message;
+            // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
+        }else {
+            vehicule.setPhotovehicule("http://127.0.0.1/controleFacile/images/vehicule/vehicule.png");
+        } if (carteGriseRepository.findByNumcartegrise(carteGrise.getNumcartegrise()) != null) {
+
+            MessageResponse message = new MessageResponse("Error: cette carte grise existe déjà !");
+            return  message;
+        }else {
+            Utilisateur utilisateur = utilisateurRepository.findByTelephone(telephone);
+            carteGrise.setStatus("Valide");
+            carteGrise.setVehicule(vehiculeRepository.save(vehicule));
+            carteGrise.setUtilisateur(utilisateur);
+            /*carteGrise.setNumserie("Nom : "+carteGrise.getNom()+"\n"+
+                                   "Prenom : "+carteGrise.getPrenom()+"\n"+
+                                   "Date de naissance : "+carteGrise.getDatenaissance()+"\n"+
+                                    "Profession : "+carteGrise.getProfession()+"\n"+
+                                    "Commune : "+carteGrise.getCommune()+"\n"+
+                                    "Telephone : "+utilisateur.getTelephone()+"\n"+
+                                    "Plaque d'ummatriculation:"+vehicule.getPlaqueimatri()+"\n"+
+                                    "Numerode la carte grise : "+carteGrise.getNumcartegrise());
+            maneqr = carteGrise.getNumcartegrise();
+            String  imagepath = "./src/main/resources/qrcodes/"+maneqr+".png";
+            QRCodeGenerator.generateQRCodeImage(carteGrise.getNumserie(), 250, 250, imagepath);*/
+
+            carteGrise.setNumserie(encoder.encode(carteGrise.getNumserie()));
+
+            carteGriseRepository.save(carteGrise);
+
+
+            MessageResponse message = new MessageResponse(" votre carte grise est enregistre avec succes !");
+            return message;
+        }
+
     }
 }
