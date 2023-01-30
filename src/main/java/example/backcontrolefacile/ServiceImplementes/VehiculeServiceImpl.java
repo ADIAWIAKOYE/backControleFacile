@@ -87,10 +87,10 @@ public class VehiculeServiceImpl implements VehiculeService {
     public MessageResponse UpdateVehicule(Long idvehicule, Vehicule vehicule) {
         if (vehiculeRepository.findByIdvehicule(idvehicule) != null){
             Vehicule updateVehicule = vehiculeRepository.findById(idvehicule).get();
-            updateVehicule.setPlaqueimatri(vehicule.getPlaqueimatri());
+           // updateVehicule.setPlaqueimatri(vehicule.getPlaqueimatri());
             updateVehicule.setCouleur(vehicule.getCouleur());
 
-            vehiculeRepository.saveAndFlush(updateVehicule);
+            vehiculeRepository.save(updateVehicule);
 
             MessageResponse message = new MessageResponse("vehicule modifier avec succes");
             return  message;
