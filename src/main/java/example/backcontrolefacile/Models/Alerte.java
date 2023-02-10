@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -21,5 +22,8 @@ public class Alerte {
     private Long idamende;
     private String status;
     private String contenue;
-    private Date date;
+    private LocalDate date;
+
+    @ManyToOne
+    private Utilisateur utilisateur;
 }

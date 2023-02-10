@@ -38,12 +38,12 @@ public class PolicierServiceImpl implements PolicierService {
     public ResponseEntity<?> ajouterPolicier(Policier policier) {
 
         if (policierRepository.existsByTelephone(policier.getTelephone())) {
-            return  ResponseEntity.badRequest().body(new MessageResponse("Error: Le nom d'utilisateur est déjà pris !"));
+            return  ResponseEntity.ok(new MessageResponse("Error: Le nom d'utilisateur est déjà pris !", false));
            // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
         }
 
         if (policierRepository.existsByEmail(policier.getEmail())) {
-           return ResponseEntity.badRequest().body(new MessageResponse("Error: cet email est déjà utilisé !"));
+           return ResponseEntity.ok(new MessageResponse("Error: cet email est déjà utilisé !", false));
            // return new MessageResponse("Error: cet email est déjà utilisé !");
        }
 
@@ -57,7 +57,7 @@ public class PolicierServiceImpl implements PolicierService {
         policier.setProfile("http://127.0.0.1/controleFacile/images/utilisateur/icone.png");
         policier.setPassword(encoder.encode(policier.getPassword()));
         policierRepository.save(policier);
-        return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès !"));
+        return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès !", true));
     }
 
     @Override
@@ -68,16 +68,16 @@ public class PolicierServiceImpl implements PolicierService {
             updatePolicier.setPrenom(policier.getPrenom());
             updatePolicier.setDomicile(policier.getDomicile());
             updatePolicier.setTelephone(policier.getTelephone());
-            updatePolicier.setPassword(policier.getPassword());
+            //updatePolicier.setPassword(policier.getPassword());
             updatePolicier.setEmail(policier.getEmail());
             updatePolicier.setGrade(policier.getGrade());
-            updatePolicier.setMatricule(policier.getMatricule());
+           // updatePolicier.setMatricule(policier.getMatricule());
 
             policierRepository.saveAndFlush(updatePolicier);
 
-            return ResponseEntity.ok(new MessageResponse("Policier modifier avec succès !"));
+            return ResponseEntity.ok(new MessageResponse("Policier modifier avec succès !", true));
         }else {
-            return ResponseEntity.ok(new MessageResponse("cet policier n'existe pas !"));
+            return ResponseEntity.ok(new MessageResponse("cet policier n'existe pas !", false));
         }
 
     }
@@ -90,9 +90,9 @@ public class PolicierServiceImpl implements PolicierService {
             updatePolicierProfile.setProfile(policier.getProfile());
 
             policierRepository.saveAndFlush(updatePolicierProfile);
-            return ResponseEntity.ok(new MessageResponse("Profile modifier avec succès !"));
+            return ResponseEntity.ok(new MessageResponse("Profile modifier avec succès !", true));
         } else {
-            return ResponseEntity.ok(new MessageResponse("cet profile n'existe pas !"));
+            return ResponseEntity.ok(new MessageResponse("cet profile n'existe pas !", false));
         }
     }
 
@@ -101,10 +101,10 @@ public class PolicierServiceImpl implements PolicierService {
         if (policierRepository.findByIdappuser(idappuser) != null){
             policierRepository.deleteById(idappuser);
 
-            MessageResponse message = new MessageResponse("Policier Supprimer avec succes");
+            MessageResponse message = new MessageResponse("Policier Supprimer avec succes", true);
             return  message;
         }else {
-            MessageResponse message = new MessageResponse("Cet Policier n'existe pas ");
+            MessageResponse message = new MessageResponse("Cet Policier n'existe pas ", false);
             return message;
         }
     }

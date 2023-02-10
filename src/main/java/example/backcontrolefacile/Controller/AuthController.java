@@ -91,6 +91,7 @@ public class AuthController {
                         userDetails.getUsername(),
                         userDetails.getEmail(),
                         userDetails.getTelephone(),
+                        userDetails.getProfile(),
                         roles));
     }
 
@@ -100,11 +101,11 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequeste signUpRequest)  {
         if (userRepository.existsByNom(signUpRequest.getNom())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Le nom d'utilisateur est déjà pris !"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Le nom d'utilisateur est déjà pris !", false));
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: cet email est déjà utilisé !"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: cet email est déjà utilisé !", false));
         }
 
         // Create new user's account
@@ -148,7 +149,7 @@ public class AuthController {
         user.setRoles(roles);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès !"));
+        return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès !", true));
     }
 
 
@@ -157,7 +158,7 @@ public class AuthController {
     public ResponseEntity<?> logoutUser() {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(new MessageResponse("Vous avez été déconnecté !"));
+                .body(new MessageResponse("Vous avez été déconnecté !", true));
     }
 
 

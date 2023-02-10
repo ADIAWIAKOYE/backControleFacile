@@ -38,12 +38,12 @@ public class VehiculeServiceImpl implements VehiculeService {
     @Override
     public ResponseEntity<?> ajouterVehicule(Vehicule vehicule) {
         if (vehiculeRepository.existsByPlaqueimatri(vehicule.getPlaqueimatri())) {
-            return  ResponseEntity.badRequest().body(new MessageResponse("Error: Cet véhicule existe déjà !"));
+            return  ResponseEntity.badRequest().body(new MessageResponse("Error: Cet véhicule existe déjà !", false));
             // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
         }
         vehicule.setPhotovehicule("http://127.0.0.1/controleFacile/images/vehicule/vehicule.png");
         vehiculeRepository.save(vehicule);
-        return ResponseEntity.ok(new MessageResponse("Vehicule enregistre avec succes !"));
+        return ResponseEntity.ok(new MessageResponse("Vehicule enregistre avec succes !", true));
 
     }
 
@@ -75,10 +75,10 @@ public class VehiculeServiceImpl implements VehiculeService {
             updateVehicule.setPhotovehicule(vehicule.getPhotovehicule());
 
             vehiculeRepository.saveAndFlush(updateVehicule);
-            MessageResponse message = new MessageResponse("vehicule modifier avec succes");
+            MessageResponse message = new MessageResponse("vehicule modifier avec succes", true);
             return  message;
         }else {
-            MessageResponse message = new MessageResponse("Cet vehicule n'existe pas ");
+            MessageResponse message = new MessageResponse("Cet vehicule n'existe pas ", false);
             return message;
         }
     }
@@ -92,10 +92,10 @@ public class VehiculeServiceImpl implements VehiculeService {
 
             vehiculeRepository.save(updateVehicule);
 
-            MessageResponse message = new MessageResponse("vehicule modifier avec succes");
+            MessageResponse message = new MessageResponse("vehicule modifier avec succes", true);
             return  message;
         }else {
-            MessageResponse message = new MessageResponse("Cet vehicule n'existe pas ");
+            MessageResponse message = new MessageResponse("Cet vehicule n'existe pas ", false);
             return message;
         }
     }
@@ -105,10 +105,10 @@ public class VehiculeServiceImpl implements VehiculeService {
         if (vehiculeRepository.findByIdvehicule(idvehicule) != null){
 
             vehiculeRepository.deleteById(idvehicule);
-            MessageResponse message = new MessageResponse("Vehicule Supprimer avec succes");
+            MessageResponse message = new MessageResponse("Vehicule Supprimer avec succes", false);
             return  message;
         }else {
-            MessageResponse message = new MessageResponse("Cet Vehicule n'existe pas ");
+            MessageResponse message = new MessageResponse("Cet Vehicule n'existe pas ", true);
 
             return message;
         }

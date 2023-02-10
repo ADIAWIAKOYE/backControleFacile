@@ -1,5 +1,6 @@
 package example.backcontrolefacile.Models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,4 +22,11 @@ public class AmendeRegle {
     private Long idamenderegle;
     private Long montant;
     private Date date;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToOne
+    Infraction infraction;
+
+    @ManyToOne
+    Permis permis;
 }

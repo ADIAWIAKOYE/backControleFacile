@@ -38,12 +38,12 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public ResponseEntity<?> ajouterAdmin(Admin admin) {
         if (adminRepository.existsByTelephone(admin.getTelephone())) {
-            return  ResponseEntity.badRequest().body(new MessageResponse("Error: Le nom d'utilisateur est déjà pris !"));
+            return  ResponseEntity.ok(new MessageResponse("Error: Le nom d'utilisateur est déjà pris !", false));
             // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
         }
 
         if (adminRepository.existsByEmail(admin.getEmail())) {
-           return ResponseEntity.badRequest().body(new MessageResponse("Error: cet email est déjà utilisé !"));
+           return ResponseEntity.ok(new MessageResponse("Error: cet email est déjà utilisé !", false));
            // return new MessageResponse("Error: cet email est déjà utilisé !");
        }
 
@@ -57,7 +57,7 @@ public class AdminServiceImpl implements AdminService {
         admin.setProfile("http://127.0.0.1/controleFacile/images/utilisateur/icone.png");
         admin.setPassword(encoder.encode(admin.getPassword()));
         adminRepository.save(admin);
-        return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès !"));
+        return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès !", true));
     }
 
     @Override
@@ -87,9 +87,9 @@ public class AdminServiceImpl implements AdminService {
 
             adminRepository.saveAndFlush(updateAdmin);
 
-            return ResponseEntity.ok(new MessageResponse("Admin modifier avec succès !"));
+            return ResponseEntity.ok(new MessageResponse("Admin modifier avec succès !", true));
         }else {
-            return ResponseEntity.ok(new MessageResponse("cet admin n'existe pas !"));
+            return ResponseEntity.ok(new MessageResponse("cet admin n'existe pas !", false));
         }
     }
 
@@ -101,9 +101,9 @@ public class AdminServiceImpl implements AdminService {
             updateAdminProfile.setProfile(admin.getProfile());
 
             adminRepository.saveAndFlush(updateAdminProfile);
-            return ResponseEntity.ok(new MessageResponse("Admin modifier avec succès !"));
+            return ResponseEntity.ok(new MessageResponse("Admin modifier avec succès !", true));
         } else {
-            return ResponseEntity.ok(new MessageResponse("cet admin n'existe pas !"));
+            return ResponseEntity.ok(new MessageResponse("cet admin n'existe pas !", false));
         }
     }
 
@@ -112,10 +112,10 @@ public class AdminServiceImpl implements AdminService {
         if (adminRepository.findByIdappuser(idappuser) != null){
             adminRepository.deleteById(idappuser);
 
-            MessageResponse message = new MessageResponse("Admin Supprimer avec succes");
+            MessageResponse message = new MessageResponse("Admin Supprimer avec succes", true);
             return  message;
         }else {
-            MessageResponse message = new MessageResponse("Cet admin n'existe pas ");
+            MessageResponse message = new MessageResponse("Cet admin n'existe pas ", false);
             return message;
         }
     }

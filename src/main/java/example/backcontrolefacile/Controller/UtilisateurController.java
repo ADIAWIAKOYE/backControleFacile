@@ -38,9 +38,13 @@ public class UtilisateurController {
     @Autowired
     private PermisRepository permisRepository;
 
+    @Autowired
     private AppUserRepository appUserRepository;
+
     @Autowired
     private AppRoleRepository appRoleRepository;
+
+
 
 
     @PutMapping("/Update/{idappuser}")
@@ -113,7 +117,7 @@ public class UtilisateurController {
 
         boolean isValid = true;
         if (existingUser == null || telephone.isEmpty() || nom.isEmpty() || prenom.isEmpty() || adresse.isEmpty() || commune.isEmpty() || profession.isEmpty()) {
-            return new MessageResponse("cet utilisateur n'existe pas .");
+            return new MessageResponse("cet utilisateur n'existe pas .", false);
         }else {
 
                 for (String cart : items) {
@@ -135,14 +139,14 @@ public class UtilisateurController {
                     existingUser.setPassword(passe);
                     utilisateurService.ModifierUtilisateur(existingUser.getIdappuser(), existingUser);
                     return new MessageResponse("Informations enregistrées avec succès. Votre mot de passe par défaut " +
-                            "est '" + passe + "' et votre compte est activé.");
+                            "est '" + passe + "' et votre compte est activé.", true);
                 }
             }else {
-                return new MessageResponse("Veillez verifier le numero de permis renseigner .");
+                return new MessageResponse("Veillez verifier le numero de permis renseigner .", false);
             }
             }
                 return new MessageResponse("Il y a un numéro de carte grise qui n'est pas lié à ce compte utilisateur " +
-                        "ou qui n'existe pas");
+                        "ou qui n'existe pas",false);
         }
 
 

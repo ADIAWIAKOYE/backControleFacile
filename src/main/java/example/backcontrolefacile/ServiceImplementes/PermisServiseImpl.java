@@ -22,12 +22,12 @@ public class PermisServiseImpl implements PermisServise {
 
         if (permisRepository.findByNumpermis(permis.getNumpermis()) != null) {
 
-            return  ResponseEntity.badRequest().body(new MessageResponse("Error: cet permis existe déjà !"));
+            return  ResponseEntity.ok(new MessageResponse("Error: cet permis existe déjà !", false));
             // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
         }
 
         permisRepository.save(permis);
-        return ResponseEntity.ok(new MessageResponse("Permis enregistré avec succès !"));
+        return ResponseEntity.ok(new MessageResponse("Permis enregistré avec succès !", true));
     }
 
     @Override
@@ -49,10 +49,10 @@ public class PermisServiseImpl implements PermisServise {
             updatepermis.setDateecheance(permis.getDateecheance());
 
             permisRepository.saveAndFlush(updatepermis);
-            MessageResponse message = new MessageResponse("Permis Modifier avec succes");
+            MessageResponse message = new MessageResponse("Permis Modifier avec succes", true);
             return  message;
         }else {
-            MessageResponse message = new MessageResponse("Cet Permis n'existe pas ");
+            MessageResponse message = new MessageResponse("Cet Permis n'existe pas ", false);
             return message;
         }
     }
@@ -64,10 +64,10 @@ public class PermisServiseImpl implements PermisServise {
             updatepermisImage.setProfilepermis(permis.getProfilepermis());
 
             permisRepository.saveAndFlush(updatepermisImage);
-            MessageResponse message = new MessageResponse("Permis Modifier avec succes");
+            MessageResponse message = new MessageResponse("Permis Modifier avec succes", true);
             return  message;
         }else {
-            MessageResponse message = new MessageResponse("Cet Permis n'existe pas ");
+            MessageResponse message = new MessageResponse("Cet Permis n'existe pas ", false);
             return message;
         }
     }
@@ -77,10 +77,10 @@ public class PermisServiseImpl implements PermisServise {
         if (permisRepository.findByIdpermis(idpermis) != null){
             permisRepository.deleteById(idpermis);
 
-            MessageResponse message = new MessageResponse("Permis Supprimer avec succes");
+            MessageResponse message = new MessageResponse("Permis Supprimer avec succes", true);
             return  message;
         }else {
-            MessageResponse message = new MessageResponse("Cet Permis n'existe pas ");
+            MessageResponse message = new MessageResponse("Cet Permis n'existe pas ", false);
             return message;
         }
     }

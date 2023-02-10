@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -19,12 +20,24 @@ public class Infraction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idinfraction;
-
+    //@Column(columnDefinition = "text")
     private String description;
     private Date date;
     private String lieu;
-    private boolean status;
+    private Boolean status;
 
-   /* @ManyToOne
-    Vehicule vehicule;*/
+    @ManyToOne
+    private Amende amende;
+
+    @ManyToOne
+    private Permis permis;
+
+    @ManyToOne
+    private Vehicule vehicule;
+
+    @ManyToOne
+    private Policier policier;
+
+    /*@OneToOne
+    AmendeRegle amendeRegle;*/
 }

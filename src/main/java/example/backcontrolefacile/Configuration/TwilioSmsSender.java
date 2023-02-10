@@ -42,4 +42,14 @@ public class TwilioSmsSender implements SmsSender {
         // TODO: Implement phone number validator
         return true;
     }
+
+
+/*    public static void sendSms(String to, String message) {
+
+        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+        Message msg = Message.creator(new PhoneNumber(to),
+                new PhoneNumber("your_twilio_phone_number"),
+                message).create();
+        System.out.println(msg.getSid());
+    }*/
 }

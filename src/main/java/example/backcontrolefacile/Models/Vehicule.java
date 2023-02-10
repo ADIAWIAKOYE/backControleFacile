@@ -1,11 +1,14 @@
 package example.backcontrolefacile.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "vehicule",
@@ -29,8 +32,8 @@ public class Vehicule {
     private String couleur;
 
 
-
-
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "vehicule", fetch = FetchType.EAGER)
+    private List<CarteGrise> carteGrise;
 
 }

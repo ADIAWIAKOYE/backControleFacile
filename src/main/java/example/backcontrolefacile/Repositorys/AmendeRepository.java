@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AmendeRepository extends JpaRepository<Amende, Long> {
+
+    Amende findByIdamende(Long idamende);
+
+    Amende findByMontant(Long montant);
 }

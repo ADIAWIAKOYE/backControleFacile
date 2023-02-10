@@ -1,8 +1,11 @@
 package example.backcontrolefacile.Controller;
 
 import example.backcontrolefacile.Configuration.SaveImage;
+import example.backcontrolefacile.Models.CarteGrise;
 import example.backcontrolefacile.Models.Permis;
+import example.backcontrolefacile.Models.Utilisateur;
 import example.backcontrolefacile.Models.Vehicule;
+import example.backcontrolefacile.Repositorys.VehiculeRepository;
 import example.backcontrolefacile.Response.MessageResponse;
 import example.backcontrolefacile.Services.PermisServise;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class PermisController {
 
     @Autowired
     private PermisServise permisServise;
+
+    @Autowired
+    private VehiculeRepository vehiculeRepository;
 
     @PostMapping("/save")
     public ResponseEntity<?> ajouterPermis(@Param("nom") String nom, @Param("prenom") String prenom, @Param("adresse") String adresse,
@@ -110,4 +116,23 @@ public class PermisController {
 
         return permisServise.permisparnumero(numpermis);
     }
+
+
+    @GetMapping("/permis/vehicule/{id}")
+    public Permis getPermisByVehicule (@PathVariable Long id) {
+        Vehicule vehicule = vehiculeRepository.findById(id).orElse(null);
+        if (vehicule == null) {
+            return null;
+        }
+        List<CarteGrise> cartegrise = vehicule.getCarteGrise();
+        for (CarteGrise carteGrise : cartegrise) {
+            /*if (carteGrise.getStatus() == "Valide"){*/
+                Utilisateur utilisateur = carteGrise.getUtilisateur();
+                return utilisateur.getPermis();
+      //  }
+
+    }
+        return null;
+    }
+
 }

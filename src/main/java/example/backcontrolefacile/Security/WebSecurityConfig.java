@@ -68,6 +68,12 @@ public class WebSecurityConfig{
                 .antMatchers("/api/cartegrise/**").permitAll()
                 .antMatchers("/api/utilisateur/**").permitAll()
                 .antMatchers("/api/vehicule/**").permitAll()
+                .antMatchers("/api/infraction/**").permitAll()
+                .antMatchers("/api/amende/**").permitAll()
+                .antMatchers("/api/amenderegle/**").permitAll()
+                .antMatchers("/api/alerte/**").permitAll()
+                .antMatchers("/api/permis/**").permitAll()
+                .antMatchers("/api/policier/**").permitAll()
                 //.authorizeHttpRequests().requestMatchers("/api/auth/**").permitAll()
                 //.antMatchers("/api/test/**").permitAll()
                 .anyRequest().authenticated();

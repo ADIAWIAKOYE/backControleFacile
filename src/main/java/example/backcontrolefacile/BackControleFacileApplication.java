@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 @EnableConfigurationProperties(RsakeysConfig.class)
+
 public class BackControleFacileApplication {
 
     public static void main(String[] args) {

@@ -40,19 +40,19 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
     @Override
     public ResponseEntity<?> ajouterCarteGrise(CarteGrise carteGrise, Long idvehiule, Long idapppuser) throws IOException, WriterException {
         if (vehiculeRepository.findByIdvehicule(idvehiule) == null) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: cet vehicule n'existe pas !"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: cet vehicule n'existe pas !", false));
         } else {
             Vehicule vehicule = vehiculeRepository.findByIdvehicule(idvehiule);
             carteGrise.setVehicule(vehicule);
         }
         if (utilisateurRepository.findByIdappuser(idapppuser) == null) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: cet utilisateur n'existe pas !"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: cet utilisateur n'existe pas !", false));
         } else {
             Utilisateur utilisateur = utilisateurRepository.findByIdappuser(idapppuser);
             carteGrise.setUtilisateur(utilisateur);
         }
         if (carteGriseRepository.findByNumcartegrise(carteGrise.getNumcartegrise()) != null) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: cette carte grise existe déjà !"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: cette carte grise existe déjà !", false));
         }
         Utilisateur utilisateur = utilisateurRepository.findByIdappuser(idapppuser);
         Vehicule vehicule = vehiculeRepository.findByIdvehicule(idvehiule);
@@ -72,7 +72,7 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
         carteGrise.setNumserie(encoder.encode(carteGrise.getNumserie()));
         carteGrise.setStatus("Expiré");
         carteGriseRepository.save(carteGrise);
-        return ResponseEntity.ok(new MessageResponse("Carte grise enregistré avec succès !"));
+        return ResponseEntity.ok(new MessageResponse("Carte grise enregistré avec succès !", true));
     }
 
     @Override
@@ -114,10 +114,10 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
             updatecartegrise.setPv(carteGrise.getPv());
 
             carteGriseRepository.saveAndFlush(updatecartegrise);
-            MessageResponse message = new MessageResponse("Carte grise Modifier avec succes");
+            MessageResponse message = new MessageResponse("Carte grise Modifier avec succes", true);
             return message;
         } else {
-            MessageResponse message = new MessageResponse("cette carte grise n'existe pas ");
+            MessageResponse message = new MessageResponse("cette carte grise n'existe pas ", false);
             return message;
         }
     }
@@ -127,10 +127,10 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
         if (carteGriseRepository.findByIdcartegrise(idcartegrise) != null) {
             carteGriseRepository.deleteById(idcartegrise);
 
-            MessageResponse message = new MessageResponse("Carte grise Supprimer avec succes");
+            MessageResponse message = new MessageResponse("Carte grise Supprimer avec succes", true);
             return message;
         } else {
-            MessageResponse message = new MessageResponse("cette carte grise n'existe pas ");
+            MessageResponse message = new MessageResponse("cette carte grise n'existe pas ", false);
             return message;
         }
     }
@@ -197,7 +197,7 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
     public MessageResponse addCarteGrise(CarteGrise carteGrise, Vehicule vehicule, Utilisateur utilisateur) throws IOException, WriterException {
         if (utilisateurRepository.existsByTelephone(utilisateur.getTelephone())) {
 
-            MessageResponse message = new MessageResponse("Error: Le numero de telephone est déjà pris !");
+            MessageResponse message = new MessageResponse("Error: Le numero de telephone est déjà pris !", false);
             return  message;
         }else {
             Set<AppRole> roles = new HashSet<>();
@@ -211,14 +211,14 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
             utilisateur.setPassword(encoder.encode(utilisateur.getPassword()));
         }
         if (vehiculeRepository.existsByPlaqueimatri(vehicule.getPlaqueimatri())) {
-            MessageResponse message = new MessageResponse("Error: Cet véhicule existe déjà !");
+            MessageResponse message = new MessageResponse("Error: Cet véhicule existe déjà !", false);
             return message;
             // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
         }else {
             vehicule.setPhotovehicule("http://127.0.0.1/controleFacile/images/vehicule/vehicule.png");
         } if (carteGriseRepository.findByNumcartegrise(carteGrise.getNumcartegrise()) != null) {
 
-            MessageResponse message = new MessageResponse("Error: cette carte grise existe déjà !");
+            MessageResponse message = new MessageResponse("Error: cette carte grise existe déjà !", false);
             return  message;
         }else {
             carteGrise.setStatus("Valide");
@@ -241,7 +241,7 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
             carteGriseRepository.save(carteGrise);
 
 
-            MessageResponse message = new MessageResponse(" votre carte grise est enregistre avec succes !");
+            MessageResponse message = new MessageResponse(" votre carte grise est enregistre avec succes !", true);
             return message;
         }
     }
@@ -250,14 +250,14 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
     public MessageResponse addVCarteGrise(CarteGrise carteGrise, Vehicule vehicule, String telephone){
 
         if (vehiculeRepository.existsByPlaqueimatri(vehicule.getPlaqueimatri())) {
-            MessageResponse message = new MessageResponse("Error: Cet véhicule existe déjà !");
+            MessageResponse message = new MessageResponse("Error: Cet véhicule existe déjà !",false);
             return message;
             // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
         }else {
             vehicule.setPhotovehicule("http://127.0.0.1/controleFacile/images/vehicule/vehicule.png");
         } if (carteGriseRepository.findByNumcartegrise(carteGrise.getNumcartegrise()) != null) {
 
-            MessageResponse message = new MessageResponse("Error: cette carte grise existe déjà !");
+            MessageResponse message = new MessageResponse("Error: cette carte grise existe déjà !", false);
             return  message;
         }else {
             Utilisateur utilisateur = utilisateurRepository.findByTelephone(telephone);
@@ -281,7 +281,7 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
             carteGriseRepository.save(carteGrise);
 
 
-            MessageResponse message = new MessageResponse(" votre carte grise est enregistre avec succes !");
+            MessageResponse message = new MessageResponse(" votre carte grise est enregistre avec succes !", false);
             return message;
         }
 

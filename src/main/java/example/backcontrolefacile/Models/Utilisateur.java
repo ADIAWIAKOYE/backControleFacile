@@ -31,6 +31,8 @@ public class Utilisateur extends AppUser {
     @OneToOne
     private Permis permis;
 
+  /*  @OneToMany(mappedBy="utilisateur")
+    private List<CarteGrise> carteGrise;*/
 
   /*  @ElementCollection
     private List<String> carteGriseNumbers;*/

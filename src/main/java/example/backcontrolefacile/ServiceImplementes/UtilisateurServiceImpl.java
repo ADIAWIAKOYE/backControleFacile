@@ -31,12 +31,12 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public ResponseEntity<?> ajouterUtilisateur(Utilisateur utilisateur) {
 
         if (utilisateurRepository.existsByTelephone(utilisateur.getTelephone())) {
-            return  ResponseEntity.badRequest().body(new MessageResponse("Error: Le nom d'utilisateur est déjà pris !"));
+            return  ResponseEntity.ok(new MessageResponse("Error: Le nom d'utilisateur est déjà pris !", false));
             // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
         }
 
         if (utilisateurRepository.existsByEmail(utilisateur.getEmail())) {
-           return ResponseEntity.badRequest().body(new MessageResponse("Error: cet email est déjà utilisé !"));
+           return ResponseEntity.ok(new MessageResponse("Error: cet email est déjà utilisé !", true));
            // return new MessageResponse("Error: cet email est déjà utilisé !");
        }
 
@@ -49,7 +49,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         utilisateur.setEtat(false);
         utilisateur.setPassword(encoder.encode(utilisateur.getPassword()));
         utilisateurRepository.save(utilisateur);
-        return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès !"));
+        return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès !", true));
 
 
     }
@@ -75,16 +75,16 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             updateUtilisateur.setPrenom(utilisateur.getPrenom());
             updateUtilisateur.setDomicile(utilisateur.getDomicile());
             updateUtilisateur.setTelephone(utilisateur.getTelephone());
-            updateUtilisateur.setPassword(utilisateur.getPassword());
-            updateUtilisateur.setEmail(utilisateur.getEmail());
+           // updateUtilisateur.setPassword(utilisateur.getPassword());
+           // updateUtilisateur.setEmail(utilisateur.getEmail());
             updateUtilisateur.setProfession(utilisateur.getProfession());
             updateUtilisateur.setCommune(utilisateur.getCommune());
 
             utilisateurRepository.saveAndFlush(updateUtilisateur);
 
-            return ResponseEntity.ok(new MessageResponse("Utilisateur modifier avec succès !"));
+            return ResponseEntity.ok(new MessageResponse("Utilisateur modifier avec succès !", true));
         }else {
-            return ResponseEntity.ok(new MessageResponse("cet utilisateur n'existe pas !"));
+            return ResponseEntity.ok(new MessageResponse("cet utilisateur n'existe pas !", false));
         }
     }
 
@@ -97,7 +97,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
        // utilisateur.setPassword(encoder.encode(utilisateur.getPassword()));
             utilisateurRepository.save(updateUtilisateur);
 
-        return ResponseEntity.ok(new MessageResponse("Utilisateur modifier avec succès !"));
+        return ResponseEntity.ok(new MessageResponse("Utilisateur modifier avec succès !", true));
     }
 
     @Override
@@ -108,9 +108,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             updateUtilisateurProfile.setProfile(utilisateur.getProfile());
 
             utilisateurRepository.saveAndFlush(updateUtilisateurProfile);
-            return ResponseEntity.ok(new MessageResponse("Utilisateur modifier avec succès !"));
+            return ResponseEntity.ok(new MessageResponse("Utilisateur modifier avec succès !", true));
         } else {
-            return ResponseEntity.ok(new MessageResponse("cet utilisateur n'existe pas !"));
+            return ResponseEntity.ok(new MessageResponse("cet utilisateur n'existe pas !", false));
         }
     }
 
@@ -119,10 +119,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         if (utilisateurRepository.findByIdappuser(idappuser) != null){
             utilisateurRepository.deleteById(idappuser);
 
-            MessageResponse message = new MessageResponse("Utilisateur Supprimer avec succes");
+            MessageResponse message = new MessageResponse("Utilisateur Supprimer avec succes", true);
             return  message;
         }else {
-            MessageResponse message = new MessageResponse("Cet utilisateur n'existe pas ");
+            MessageResponse message = new MessageResponse("Cet utilisateur n'existe pas ", false);
             return message;
         }
     }

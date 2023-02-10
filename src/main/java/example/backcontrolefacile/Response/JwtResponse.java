@@ -19,14 +19,17 @@ public class JwtResponse {
     private String nom;
     private String email;
     private String telephone;
+
+    private String profile;
     private List<String> roles;
 
-    public JwtResponse( Long idappuser, String nom, String email, String telephone, List<String> roles) {
+    public JwtResponse( Long idappuser, String nom, String email, String telephone, String profile, List<String> roles) {
        // this.token = accessToken;
         this.idappuser = idappuser;
         this.nom = nom;
         this.email = email;
         this.telephone = telephone;
+        this.profile = profile;
         this.roles = roles;
     }
 }
