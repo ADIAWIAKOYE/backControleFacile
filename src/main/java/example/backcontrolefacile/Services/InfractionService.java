@@ -3,7 +3,10 @@ package example.backcontrolefacile.Services;
 import example.backcontrolefacile.Models.Amende;
 import example.backcontrolefacile.Models.AmendeRegle;
 import example.backcontrolefacile.Models.Infraction;
+import example.backcontrolefacile.Models.Vehicule;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface InfractionService {
 
@@ -14,4 +17,5 @@ public interface InfractionService {
 
     ResponseEntity<?> ajouterInfractionavecpermis(Infraction infraction, AmendeRegle amendeRegle, Long idappuser, String numpermis, Long montant, Long idvehicule);
 
+    List<Infraction> afficherInfraction();
 }

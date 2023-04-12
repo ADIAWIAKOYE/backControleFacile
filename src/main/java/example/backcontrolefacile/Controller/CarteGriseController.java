@@ -69,7 +69,7 @@ public class CarteGriseController {
         return carteGriseServise.CarteGriseparnumero(numcartegrise);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/afficherParVehicule/{idvehicule}")
     public List<CarteGrise> CarteGriseParVehicule(@PathVariable Vehicule idvehicule) {
 

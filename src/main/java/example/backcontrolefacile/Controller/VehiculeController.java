@@ -2,6 +2,7 @@ package example.backcontrolefacile.Controller;
 
 import example.backcontrolefacile.Configuration.SaveImage;
 import example.backcontrolefacile.Models.Vehicule;
+import example.backcontrolefacile.Repositorys.VehiculeRepository;
 import example.backcontrolefacile.Response.MessageResponse;
 import example.backcontrolefacile.Services.VehiculeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class VehiculeController {
 
     @Autowired
     private VehiculeService vehiculeService;
+    @Autowired
+    private VehiculeRepository vehiculeRepository;
 
 
     @PostMapping("/save")
@@ -127,5 +130,11 @@ public class VehiculeController {
     @GetMapping("/user/{userId}")
     public List<Vehicule> getVehiclesByUserId(@PathVariable Long userId) {
         return vehiculeService.findByUserId(userId);
+    }
+
+
+    @GetMapping("/findallVehicul")
+    public List<Object[]> vehiculeuser() {
+        return vehiculeRepository.findallVehicul();
     }
 }

@@ -143,4 +143,9 @@ public class InfractionServiceImpl implements InfractionService {
             return ResponseEntity.ok(new MessageResponse("cet controlleur de vehicule n'existe pas  n'existe pas!", false));
         }
     }
+
+    @Override
+    public List<Infraction> afficherInfraction() {
+        return infractionRepository.findAll();
+    }
 }

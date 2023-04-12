@@ -197,7 +197,7 @@ public class AuthController {
 
     @PostMapping("/sinuPoliceII")
     public ResponseEntity<?> ajouterPolicierII(@Param(value = "nom") String nom, @Param(value = "prenom") String prenom, @Param(value = "adresse") String adresse,
-                                               @Param(value = "telephone") String telephone, @Param(value = "email") String email, @Param(value = "password") String password,
+                                               @Param(value = "telephone") String telephone, @Param(value = "email") String email,
                                                @Param(value = "matricule") String matricule, @Param(value = "grade") String grade) {
         Policier pol = new Policier();
 //        String photoname = StringUtils.cleanPath(file.getOriginalFilename());
@@ -207,7 +207,7 @@ public class AuthController {
             pol.setDomicile(adresse);
             pol.setTelephone(telephone);
             pol.setEmail(email);
-            pol.setPassword(password);
+//            pol.setPassword(password);
             pol.setMatricule(matricule);
             pol.setGrade(grade);
 
@@ -304,7 +304,7 @@ public class AuthController {
 
     @PostMapping("/sinudminI")
     public ResponseEntity<?> ajouteAdminI(@Param(value = "nom") String nom, @Param(value = "prenom") String prenom, @Param(value = "adresse") String adresse,
-                                           @Param(value = "telephone") String telephone, @Param(value = "email") String email, @Param(value = "password") String password
+                                           @Param(value = "telephone") String telephone, @Param(value = "email") String email
                                            ) {
         Admin adm = new Admin();
       //  String photoname = StringUtils.cleanPath(file.getOriginalFilename());
@@ -314,7 +314,7 @@ public class AuthController {
             adm.setDomicile(adresse);
             adm.setTelephone(telephone);
             adm.setEmail(email);
-            adm.setPassword(password);
+           // adm.setPassword(password);
 
             /*if (file != null) {
 

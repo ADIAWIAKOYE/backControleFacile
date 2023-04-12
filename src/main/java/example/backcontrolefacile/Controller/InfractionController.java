@@ -67,15 +67,33 @@ public class InfractionController {
         return infractionRepository.AfficherinfractionParIdUtilisateurrr(idutilisateur);
     }
 
+    @GetMapping("/infractionparutilisateurnbre/{idutilisateur}")
+    public int AfficherinfractionParIdUtilisateurnbre(@PathVariable Long idutilisateur) {
+        return infractionRepository.AfficherinfractionParIdUtilisateurrr(idutilisateur).size();
+    }
+
 
     @GetMapping("/infractionparvehicule/{idvehicule}")
-    public List<Infraction> infractionparvehicule(@PathVariable Vehicule idvehicule) {
-        return infractionRepository.findByVehicule(idvehicule);
+    public List<Infraction> infractionparvehicule(@PathVariable Long idvehicule) {
+        return infractionRepository.AfficherinfractionParIdVehicule(idvehicule);
     }
 
     @GetMapping("/AfficherinfractionAmendeRegleParVehicule/{idvehicule}")
     public List<Object[]> AfficherinfractionAmendeRegleParVehicule(@PathVariable Long idvehicule) {
 
         return infractionRepository.afficherInfractionAmendeRegleParVehicule(idvehicule);
+    }
+
+
+    @GetMapping("/afficher")
+    public List<Infraction> afficherInfraction() {
+
+        return infractionService.afficherInfraction();
+    }
+
+    @GetMapping("/affichernbr")
+    public int afficherNbrInfraction() {
+
+        return infractionService.afficherInfraction().size();
     }
 }

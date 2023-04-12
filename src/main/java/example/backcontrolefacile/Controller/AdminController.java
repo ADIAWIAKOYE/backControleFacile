@@ -22,8 +22,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Random;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -81,6 +84,7 @@ public class AdminController {
     }
 
     @GetMapping("/afficher")
+    //@PreAuthorize("hasRole('ADMIN')")
     public List<Admin> afficherPolicier() {
 
         return adminService.afficherAdmin();
@@ -98,17 +102,23 @@ public class AdminController {
     private PermisRepository permisRepository;
 
     @PostMapping("/ajouterUtilisateurCartegriseVehicule2/{numpermi}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public MessageResponse ajouterUtilisateurCartegriseVehicule2(@PathVariable(value = "numpermi") String numpermi, @Param(value = "nom") String nom, @Param(value = "prenom") String prenom, @Param(value = "adresse") String adresse, @Param(value = "password") String password,
+    // @PreAuthorize("hasRole('ADMIN')")
+    public MessageResponse ajouterUtilisateurCartegriseVehicule2(@PathVariable(value = "numpermi") String numpermi, @Param(value = "nom") String nom, @Param(value = "prenom") String prenom, @Param(value = "adresse") String adresse,
                                                                   @Param(value = "commune") String commune, @Param(value = "profession") String profession, @Param(value = "lieunaissance") String lieunaissance,
-                                                                  @Param(value = "datenaissance") LocalDate datenaissance, @Param(value = "telephone") String telephone,
+                                                                  @Param(value = "datenaissance") String datenaissance, @Param(value = "telephone") String telephone,
 
                                                                   @Param(value = "plaqueimatri") String plaqueimatri,  @Param(value = "couleur") String couleur,
 
                                                                   @Param(value = "numcartegrise") String numcartegrise, @Param(value = "genre") String genre, @Param(value = "marque") String marque, @Param(value = "type") String type, @Param(value = "chassie") String chassie,
                                                                   @Param(value = "carrouserie") String carrouserie, @Param(value = "capacite") String capacite, @Param(value = "nbplace") int nbplace, @Param(value = "coutunitaire") int coutunitaire,
-                                                                  @Param(value = "energie") String energie, @Param(value = "puissancereel") int puissancereel, @Param(value = "puissanceadmin") int puissanceadmin, @Param(value = "dpmc") LocalDate dpmc,
-                                                                  @Param(value = "datedelivrance") LocalDate datedelivrance, @Param(value = "dateecheance") LocalDate dateecheance, @Param(value = "ptac") int ptac, @Param(value = "pv") int pv) throws IOException, WriterException {
+                                                                  @Param(value = "energie") String energie, @Param(value = "puissancereel") int puissancereel, @Param(value = "puissanceadmin") int puissanceadmin, @Param(value = "dpmc") String dpmc,
+                                                                  @Param(value = "datedelivrance") String datedelivrance, @Param(value = "dateecheance") String dateecheance, @Param(value = "ptac") int ptac, @Param(value = "pv") int pv) throws IOException, WriterException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateFormatnaissance = LocalDate.parse(datenaissance, formatter);
+        LocalDate dateFormatdpmc = LocalDate.parse(dpmc, formatter);
+        LocalDate dateFormatdelivrance = LocalDate.parse(datedelivrance, formatter);
+        LocalDate dateFormatecheance = LocalDate.parse(dateecheance, formatter);
+
         Utilisateur util = new Utilisateur();
         Vehicule vehi = new Vehicule();
         CarteGrise cg = new CarteGrise();
@@ -126,9 +136,8 @@ public class AdminController {
                 util.setCommune(commune);
                 util.setProfession(profession);
                 util.setLieunaissance(lieunaissance);
-                util.setDatenaissance(datenaissance);
+                util.setDatenaissance(dateFormatnaissance);
                 util.setTelephone(telephone);
-                util.setPassword(password);
                 util.setPermis(permis);
 
 
@@ -140,7 +149,7 @@ public class AdminController {
                 cg.setCommune(commune);
                 cg.setProfession(profession);
                 cg.setLieunaissance(lieunaissance);
-                cg.setDatenaissance(datenaissance);
+                cg.setDatenaissance(dateFormatnaissance);
                 cg.setNumcartegrise(numcartegrise);
                 cg.setGenre(genre);
                 cg.setMarque(marque);
@@ -153,9 +162,9 @@ public class AdminController {
                 cg.setEnergie(energie);
                 cg.setPuissancereel(puissancereel);
                 cg.setPuissanceadmin(puissanceadmin);
-                cg.setDpmc(dpmc);
-                cg.setDatedelivrance(datedelivrance);
-                cg.setDateecheance(dateecheance);
+                cg.setDpmc(dateFormatdpmc);
+                cg.setDatedelivrance(dateFormatdelivrance);
+                cg.setDateecheance(dateFormatecheance);
                 cg.setPtac(ptac);
                 cg.setPv(pv);
 
@@ -164,18 +173,25 @@ public class AdminController {
             vehi.setUtilisateur(util);*/
                 vehi.setCouleur(couleur);
                 vehi.setPlaqueimatri(plaqueimatri);
+//               String u = "Nom : "+nom+"\n"+"Prenom : "+prenom+"\n"+"Date de naissance : "+datenaissance+"\n"+
+//                       "Profession : "+profession+"\n"+"Commune : "+commune+"\n"+"Tel : "+telephone+"\n"+
+//                       "Immatriculation:"+plaqueimatri+"\n"+ "N° Carte Grise : "+numcartegrise+"\n"+
+//                       "Genre : "+genre+"\n"+"Marque : "+marque+"\n"+"Chassie : "+chassie+"\n"+"Carrosserie : "+carrouserie+"\n"+
+//                       "Type : "+type+"\n"+"Capacite : "+capacite+"\n"+"Nombre de place : "+nbplace+"\n"+
+//                       "Energie : "+energie+"\n"+"Cout unitaire : "+coutunitaire+"\n"+"Puissance Admin : "+puissanceadmin+"\n"+
+//                       "Puissance Reel : "+puissancereel+"\n"+ "Valider du "+datedelivrance+" au "+dateecheance+"\n"+
+//                       "D P M C : "+dpmc+"\n"+"D P A C  : "+ptac+"\n"+ " P V  : "+pv;
 
-                cg.setNumserie("Nom : "+nom+"\n"+"Prenom : "+prenom+"\n"+"Date de naissance : "+datenaissance+"\n"+
-                        "Profession : "+profession+"\n"+"Commune : "+commune+"\n"+"Telephone : "+telephone+"\n"+
-                        "Plaque d'ummatriculation:"+plaqueimatri+"\n"+ "Numerode la carte grise : "+numcartegrise+"\n"+
-                        "Genre : "+genre+"\n"+"Marque : "+marque+"\n"+"Chassie : "+chassie+"\n"+"Carrosserie : "+carrouserie+"\n"+
-                        "Type : "+type+"\n"+"Capacite : "+capacite+"\n"+"Nombre de place : "+nbplace+"\n"+
-                        "Energie : "+energie+"\n"+"Cout unitaire : "+coutunitaire+"\n"+"Puissance Admin : "+puissanceadmin+"\n"+
-                        "Puissance Reél : "+puissancereel+"\n"+ "Validé du "+datedelivrance+" au "+dateecheance+"\n"+
-                        "Date de premiere mise en circulation : "+dpmc+"\n"+"D P A C  : "+ptac+"\n"+ " P V  : "+pv);
+                String u = "Nom Complet "+nom+"  "+prenom+" |  | "+
+                        "Profession : "+profession+" |  | "+"Commune : "+commune+" |  | "+"Tel : "+telephone+" |  | "+
+                        "N°plaque : "+plaqueimatri+" |  | "+"Marque : "+marque +" "+genre+" |  | "+"Chassie : "+chassie+" |  | "+"DPMC : "+dpmc;
+
+                  cg.setNumserie(u);
+
+                System.out.println("le contenu du Qrcode" + u);
                 maneqr = vehi.getPlaqueimatri();
                 String  imagepath = "./src/main/resources/qrcodes/"+maneqr+".png";
-                QRCodeGenerator.generateQRCodeImage(cg.getNumserie(), 250, 250, imagepath);
+                QRCodeGenerator.generateQRCodeImage(cg.getNumserie(), 500, 500, imagepath);
 
             }catch (Exception e) {
                 // TODO: handle exception
@@ -188,18 +204,25 @@ public class AdminController {
 
 
 
+
+
     @PostMapping("/ajouterCartegriseVehicule2/{telephone}")
-    @PreAuthorize("hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('ADMIN')")
     public MessageResponse ajouterCartegriseVehicule2(@PathVariable(value = "telephone") String telephone, @Param(value = "nom") String nom, @Param(value = "prenom") String prenom, @Param(value = "adresse") String adresse,
                                                                  @Param(value = "commune") String commune, @Param(value = "profession") String profession, @Param(value = "lieunaissance") String lieunaissance,
-                                                                 @Param(value = "datenaissance") LocalDate datenaissance,
+                                                                 @Param(value = "datenaissance") String datenaissance,
 
                                                                  @Param(value = "plaqueimatri") String plaqueimatri,  @Param(value = "couleur") String couleur,
 
                                                                  @Param(value = "numcartegrise") String numcartegrise, @Param(value = "genre") String genre, @Param(value = "marque") String marque, @Param(value = "type") String type, @Param(value = "chassie") String chassie,
                                                                  @Param(value = "carrouserie") String carrouserie, @Param(value = "capacite") String capacite, @Param(value = "nbplace") int nbplace, @Param(value = "coutunitaire") int coutunitaire,
-                                                                 @Param(value = "energie") String energie, @Param(value = "puissancereel") int puissancereel, @Param(value = "puissanceadmin") int puissanceadmin, @Param(value = "dpmc") LocalDate dpmc,
-                                                                 @Param(value = "datedelivrance") LocalDate datedelivrance, @Param(value = "dateecheance") LocalDate dateecheance, @Param(value = "ptac") int ptac, @Param(value = "pv") int pv) {
+                                                                 @Param(value = "energie") String energie, @Param(value = "puissancereel") int puissancereel, @Param(value = "puissanceadmin") int puissanceadmin, @Param(value = "dpmc") String dpmc,
+                                                                 @Param(value = "datedelivrance") String datedelivrance, @Param(value = "dateecheance") String dateecheance, @Param(value = "ptac") int ptac, @Param(value = "pv") int pv) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateFormatnaissance = LocalDate.parse(datenaissance, formatter);
+        LocalDate dateFormatdpmc = LocalDate.parse(dpmc, formatter);
+        LocalDate dateFormatdelivrance = LocalDate.parse(datedelivrance, formatter);
+        LocalDate dateFormatecheance = LocalDate.parse(dateecheance, formatter);
         Vehicule vehi = new Vehicule();
         CarteGrise cg = new CarteGrise();
         if (utilisateurRepository.findByTelephone(telephone) == null){
@@ -218,7 +241,7 @@ public class AdminController {
                 cg.setCommune(commune);
                 cg.setProfession(profession);
                 cg.setLieunaissance(lieunaissance);
-                cg.setDatenaissance(datenaissance);
+                cg.setDatenaissance(dateFormatnaissance);
                 cg.setNumcartegrise(numcartegrise);
                 cg.setGenre(genre);
                 cg.setMarque(marque);
@@ -231,9 +254,9 @@ public class AdminController {
                 cg.setEnergie(energie);
                 cg.setPuissancereel(puissancereel);
                 cg.setPuissanceadmin(puissanceadmin);
-                cg.setDpmc(dpmc);
-                cg.setDatedelivrance(datedelivrance);
-                cg.setDateecheance(dateecheance);
+                cg.setDpmc(dateFormatdpmc);
+                cg.setDatedelivrance(dateFormatdelivrance);
+                cg.setDateecheance(dateFormatecheance);
                 cg.setPtac(ptac);
                 cg.setPv(pv);
                 cg.setUtilisateur(utilisateur);
@@ -244,24 +267,29 @@ public class AdminController {
                 vehi.setCouleur(couleur);
                 vehi.setPlaqueimatri(plaqueimatri);
 
-                cg.setNumserie("Nom : "+nom+"\n"+"Prenom : "+prenom+"\n"+"Date de naissance : "+datenaissance+"\n"+
-                        "Profession : "+profession+"\n"+"Commune : "+commune+"\n"+"Telephone : "+telephone+"\n"+
-                        "Plaque d'ummatriculation:"+plaqueimatri+"\n"+ "Numerode la carte grise : "+numcartegrise+"\n"+
-                        "Genre : "+genre+"\n"+"Marque : "+marque+"\n"+"Chassie : "+chassie+"\n"+"Carrosserie : "+carrouserie+"\n"+
-                        "Type : "+type+"\n"+"Capacite : "+capacite+"\n"+"Nombre de place : "+nbplace+"\n"+
-                        "Energie : "+energie+"\n"+"Cout unitaire : "+coutunitaire+"\n"+"Puissance Admin : "+puissanceadmin+"\n"+
-                        "Puissance Reél : "+puissancereel+"\n"+ "Validé du "+datedelivrance+" au "+dateecheance+"\n"+
-                        "Date de premiere mise en circulation : "+dpmc+"\n"+"D P A C  : "+ptac+"\n"+ " P V  : "+pv);
+                String u = "Nom Complet : "+nom+" "+prenom+" | | "+
+                        "Profession : "+profession+" | | "+"Commune : "+commune+" | | "+"Tel : "+telephone+" | | "+
+                         "N°plaque : "+plaqueimatri+" | | "+"Marque : "+marque +" "+genre+" | | "+"Chassie : "+chassie+" | | "+"DPMC : "+dpmc;
+                String z ="Carrosserie : "+carrouserie+"|  |"+"Type : "+type+"|  |"+"Capacite : "+capacite+"|  |"+"Nombre de place : "+nbplace+"\n"+
+                        "Energie: "+energie+"|  |"+"Cout unitaire : "+coutunitaire+"|  |"+"Puissance Admin : "+puissanceadmin+"\n"+
+                        "Puissance Reel : "+puissancereel+"|  |"+ "Validé du "+datedelivrance+" au "+dateecheance+"\n"+
+                        "D P A C  : "+ptac+"|  |"+ " P V  : "+pv ;
+String  y = u ;
+                cg.setNumserie(u);
+
                 maneqr = vehi.getPlaqueimatri();
                 String  imagepath = "./src/main/resources/qrcodes/"+maneqr+".png";
-                QRCodeGenerator.generateQRCodeImage(cg.getNumserie(), 250, 250, imagepath);
+                QRCodeGenerator.generateQRCodeImage(cg.getNumserie(), 500, 500, imagepath);
 
+                System.out.println("le qrcode  "+ u);
             }catch (Exception e) {
                 // TODO: handle exception
             }
+
             return carteGriseServise.addVCarteGrise(cg, vehi, telephone);
         }
 
     }
+
 
 }

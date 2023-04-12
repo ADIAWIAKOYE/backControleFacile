@@ -1,7 +1,10 @@
 package example.backcontrolefacile.ServiceImplementes;
 
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.rest.api.v2010.account.MessageCreator;
+import com.twilio.type.PhoneNumber;
+import example.backcontrolefacile.Configuration.TwilioConfiguration;
 import example.backcontrolefacile.Models.AppRole;
-import example.backcontrolefacile.Models.AppUser;
 import example.backcontrolefacile.Models.ERole;
 import example.backcontrolefacile.Models.Policier;
 import example.backcontrolefacile.Repositorys.AppRoleRepository;
@@ -14,10 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class PolicierServiceImpl implements PolicierService {
@@ -33,6 +33,14 @@ public class PolicierServiceImpl implements PolicierService {
 
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
+    private TwilioConfiguration twilioConfiguration;
+
+    public PolicierServiceImpl(TwilioConfiguration twilioConfiguration) {
+        this.twilioConfiguration = twilioConfiguration;
+    }
+
 
     @Override
     public ResponseEntity<?> ajouterPolicier(Policier policier) {
@@ -54,10 +62,26 @@ public class PolicierServiceImpl implements PolicierService {
         System.out.println("erttrtdtrtretretr"+roles);
         policier.setRoles(roles);
         policier.setEtat(true);
+        String passe = generateRandomPassword();
         policier.setProfile("http://127.0.0.1/controleFacile/images/utilisateur/icone.png");
-        policier.setPassword(encoder.encode(policier.getPassword()));
+        policier.setPassword(encoder.encode(passe));
         policierRepository.save(policier);
-        return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès !", true));
+        PhoneNumber to = new PhoneNumber(policier.getTelephone());
+        PhoneNumber from = new PhoneNumber(twilioConfiguration.getTrialNumber());
+        String message = "Bienvenue sur l'application ControleFacile votre mot de passe " +
+                "est '" + passe + "' et votre compte est activé.";
+        MessageCreator creator = Message.creator(to, from, message);
+        creator.create();
+        return ResponseEntity.ok(new MessageResponse("Conroleur enregistre avec succes" , true));
+    }
+
+    private String generateRandomPassword() {
+        Random r = new Random();
+        String password = "";
+        for (int i = 0; i < 10; i++) {
+            password += String.valueOf(r.nextInt(10));
+        }
+        return password;
     }
 
     @Override

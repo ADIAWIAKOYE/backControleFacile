@@ -33,4 +33,10 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
 
     @Query("SELECT DISTINCT v FROM Vehicule v JOIN CarteGrise cg ON v.idvehicule = cg.vehicule.idvehicule JOIN Utilisateur u ON cg.utilisateur.idappuser = u.idappuser WHERE u.idappuser = :utilisateurId")
     List<Vehicule> findVehiculesByIdappuser(@Param("utilisateurId") Long utilisateurId);
+
+    @Query(value = "SELECT DISTINCT vehicule.*, cartegrise.* FROM Vehicule JOIN CarteGrise ON vehicule.idvehicule = cartegrise.vehicule_idvehicule JOIN Utilisateur ON cartegrise.utilisateur_idappuser = utilisateur.idappuser WHERE utilisateur.idappuser = :idappuser AND cartegrise.dateecheance = (SELECT MAX(cartegrise.dateecheance) FROM CarteGrise cartegrise WHERE cartegrise.vehicule_idvehicule = vehicule.idvehicule)",nativeQuery = true)
+    List<Object[]> findVehicules2ByIdappuser(Long idappuser);
+
+
+
 }

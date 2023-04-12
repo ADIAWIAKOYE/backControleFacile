@@ -21,4 +21,8 @@ public interface VehiculeRepository extends JpaRepository<Vehicule, Long> {
     @Query("SELECT v FROM Vehicule v INNER JOIN CarteGrise c ON v.idvehicule = c.vehicule.idvehicule WHERE c.utilisateur = :utilisateur")
     List<Vehicule> findByUtilisateur(@Param("utilisateur") Utilisateur utilisateur);
 
+
+
+    @Query(value = "SELECT DISTINCT vehicule.*, cartegrise.* FROM Vehicule JOIN CarteGrise ON vehicule.idvehicule = cartegrise.vehicule_idvehicule JOIN Utilisateur ON cartegrise.utilisateur_idappuser = utilisateur.idappuser WHERE cartegrise.dateecheance = (SELECT MAX(cartegrise.dateecheance) FROM CarteGrise cartegrise WHERE cartegrise.vehicule_idvehicule = vehicule.idvehicule)",nativeQuery = true)
+    List<Object[]> findallVehicul();
 }

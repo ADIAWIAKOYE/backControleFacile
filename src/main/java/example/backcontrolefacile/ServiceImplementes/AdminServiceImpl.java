@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 @Service
@@ -53,11 +54,21 @@ public class AdminServiceImpl implements AdminService {
         roles.add(policeRole);
         System.out.println("erttrtdtrtretretr"+roles);
         admin.setRoles(roles);
+        String passe = generateRandomPassword();
         admin.setEtat(true);
         admin.setProfile("http://127.0.0.1/controleFacile/images/utilisateur/icone.png");
-        admin.setPassword(encoder.encode(admin.getPassword()));
+        admin.setPassword(encoder.encode(passe));
         adminRepository.save(admin);
-        return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès !", true));
+        return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès ! le mot de passe est : "+ passe , true));
+    }
+
+    private String generateRandomPassword() {
+        Random r = new Random();
+        String password = "";
+        for (int i = 0; i < 10; i++) {
+            password += String.valueOf(r.nextInt(10));
+        }
+        return password;
     }
 
     @Override

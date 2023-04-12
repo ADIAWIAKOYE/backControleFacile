@@ -60,14 +60,14 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
                 "Prenom : " + carteGrise.getPrenom() + "\n" + "Né le : " + carteGrise.getDatenaissance() + " à " + carteGrise.getLieunaissance() + "\n" +
                 "Profession : " + carteGrise.getProfession() + "\n" + "Commune : " + carteGrise.getCommune() + "\n" + "Domicile : " + carteGrise.getDomicile() + "\n" +
                 "Telephone : " + utilisateur.getTelephone() + "\n" + "Plaque d'ummatriculation :" + vehicule.getPlaqueimatri() + "\n" + "Genre : " + carteGrise.getGenre() + "\n" +
-                "Numerode la carte grise : " + carteGrise.getNumcartegrise() + "\n" + "Chassie : " + carteGrise.getChassie() + "\n" + "Carrosserie :" + carteGrise.getCarrouserie() + "\n" +
+                "N° Carte Grise : " + carteGrise.getNumcartegrise() + "\n" + "Chassie : " + carteGrise.getChassie() + "\n" + "Carrosserie :" + carteGrise.getCarrouserie() + "\n" +
                 "Type : " + carteGrise.getType() + "\n" + "Capacité : " + carteGrise.getCapacite() + "\n" + "nombre  : " + carteGrise.getChassie() + "\n" + "Carrosserie :" + carteGrise.getCarrouserie() + "\n" +
                 "Energie : " + carteGrise.getEnergie() + "\n" + "Cout unitaire : " + carteGrise.getCoutunitaire() + "\n" + "Puissanse reél : " + carteGrise.getPuissancereel() + "\n" +
-                "Date de première mise en circulation : " + carteGrise.getDpmc() + "\n" + "Validé du :" + carteGrise.getDatedelivrance() + " au " + carteGrise.getDateecheance() + "\n" +
+                "D P M C : " + carteGrise.getDpmc() + "\n" + "Validé du :" + carteGrise.getDatedelivrance() + " au " + carteGrise.getDateecheance() + "\n" +
                 "D P A C  : " + carteGrise.getPtac() + "\n" + " P V  : " + carteGrise.getPv());
         maneqr = carteGrise.getNumcartegrise();
         String imagepath = "./src/main/resources/qrcodes/" + maneqr + ".png";
-        QRCodeGenerator.generateQRCodeImage(carteGrise.getNumserie(), 250, 250, imagepath);
+        QRCodeGenerator.generateQRCodeImage(carteGrise.getNumserie(), 500, 500, imagepath);
 
         carteGrise.setNumserie(encoder.encode(carteGrise.getNumserie()));
         carteGrise.setStatus("Expiré");
@@ -195,6 +195,7 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
     String maneqr;
     @Override
     public MessageResponse addCarteGrise(CarteGrise carteGrise, Vehicule vehicule, Utilisateur utilisateur) throws IOException, WriterException {
+        String passe = generateRandomPassword();
         if (utilisateurRepository.existsByTelephone(utilisateur.getTelephone())) {
 
             MessageResponse message = new MessageResponse("Error: Le numero de telephone est déjà pris !", false);
@@ -205,10 +206,11 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
                     .orElseThrow(() -> new RuntimeException("Error: Le rôle est introuvable."));
             roles.add(policeRole);
             System.out.println("erttrtdtrtretretr" + roles);
+
             utilisateur.setRoles(roles);
             utilisateur.setEtat(false);
             utilisateur.setProfile("http://127.0.0.1/controleFacile/images/utilisateur/icone.png");
-            utilisateur.setPassword(encoder.encode(utilisateur.getPassword()));
+            utilisateur.setPassword(encoder.encode(passe));
         }
         if (vehiculeRepository.existsByPlaqueimatri(vehicule.getPlaqueimatri())) {
             MessageResponse message = new MessageResponse("Error: Cet véhicule existe déjà !", false);
@@ -241,9 +243,20 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
             carteGriseRepository.save(carteGrise);
 
 
-            MessageResponse message = new MessageResponse(" votre carte grise est enregistre avec succes !", true);
+            MessageResponse message = new MessageResponse(" votre carte grise est enregistre avec succes !" +
+                    "le mot de passe par defaut pour le compt utilisateur est le :"+ passe, true);
             return message;
         }
+
+    }
+
+    private String generateRandomPassword() {
+        Random r = new Random();
+        String password = "";
+        for (int i = 0; i < 10; i++) {
+            password += String.valueOf(r.nextInt(10));
+        }
+        return password;
     }
 
     @Override
@@ -281,7 +294,7 @@ public class CarteGriseServiseImpl implements CarteGriseServise {
             carteGriseRepository.save(carteGrise);
 
 
-            MessageResponse message = new MessageResponse(" votre carte grise est enregistre avec succes !", false);
+            MessageResponse message = new MessageResponse(" votre vehicule est enregistre avec succes !", true);
             return message;
         }
 

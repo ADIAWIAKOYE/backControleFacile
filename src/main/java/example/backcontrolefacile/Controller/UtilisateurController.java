@@ -1,16 +1,16 @@
 package example.backcontrolefacile.Controller;
 
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.rest.api.v2010.account.MessageCreator;
+import com.twilio.type.PhoneNumber;
 import example.backcontrolefacile.Configuration.SaveImage;
-import example.backcontrolefacile.Models.AppUser;
-import example.backcontrolefacile.Models.CarteGrise;
-import example.backcontrolefacile.Models.Permis;
-import example.backcontrolefacile.Models.Utilisateur;
+import example.backcontrolefacile.Configuration.SmsRequest;
+import example.backcontrolefacile.Configuration.TwilioConfiguration;
+import example.backcontrolefacile.Models.*;
 import example.backcontrolefacile.Repositorys.*;
 import example.backcontrolefacile.Response.MessageResponse;
 import example.backcontrolefacile.Services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -44,7 +44,12 @@ public class UtilisateurController {
     @Autowired
     private AppRoleRepository appRoleRepository;
 
+    @Autowired
+    private final TwilioConfiguration twilioConfiguration;
 
+    public UtilisateurController(TwilioConfiguration twilioConfiguration) {
+        this.twilioConfiguration = twilioConfiguration;
+    }
 
 
     @PutMapping("/Update/{idappuser}")
@@ -52,6 +57,47 @@ public class UtilisateurController {
 
         return utilisateurService.UpdateUtilisateur(idappuser, utilisateur);
     }
+
+    @PutMapping("/Updateutil/{idappuser}")
+    public ResponseEntity<?> UpdateUtilisateurU(@PathVariable Long idappuser, @RequestParam(value = "nom") String nom, @RequestParam(value = "prenom") String prenom,
+                                                @RequestParam(value = "domicile") String domicile, @RequestParam(value = "telephone") String telephone,
+                                                @RequestParam(value = "profession") String profession, @RequestParam(value = "commune") String commune) {
+        Utilisateur utilisateur = utilisateurRepository.findByIdappuser(idappuser);
+    //    System.out.println("le grade est "+ grade );
+        if(nom == null|| nom.trim().isEmpty()) {
+            utilisateur.setNom(utilisateur.getNom());
+        }else {
+            utilisateur.setNom(nom);
+        }
+        if(prenom == null|| prenom.trim().isEmpty()) {
+            utilisateur.setPrenom(utilisateur.getPrenom());
+        }else {
+            utilisateur.setPrenom(prenom);
+        }
+        if(domicile == null|| domicile.trim().isEmpty()) {
+            utilisateur.setDomicile(utilisateur.getDomicile());
+        }else {
+            utilisateur.setDomicile(domicile);
+        }
+        if(telephone == null|| telephone.trim().isEmpty()) {
+            utilisateur.setTelephone(utilisateur.getTelephone());
+        }else {
+            utilisateur.setTelephone(telephone);
+        }
+        if(profession == null|| profession.trim().isEmpty()) {
+            utilisateur.setProfession(utilisateur.getProfession());
+        }else {
+            utilisateur.setProfession(profession);
+        }
+        if(commune == null|| commune.trim().isEmpty()) {
+            utilisateur.setCommune(utilisateur.getCommune());
+        }else {
+            utilisateur.setCommune(commune);
+        }
+        return utilisateurService.UpdateUtilisateur(idappuser, utilisateur);
+    }
+
+
 
     @PutMapping("/UpdateProfile/{idappuser}")
     public ResponseEntity<?> UpdateUtilisateurProfile(@PathVariable("idappuser") Long idappuser,
@@ -137,9 +183,15 @@ public class UtilisateurController {
                     existingUser.setEtat(true);
                     String passe = generateRandomPassword();
                     existingUser.setPassword(passe);
+                   // SmsRequest smsRequest = new SmsRequest(telephone, message);
+                    PhoneNumber to = new PhoneNumber(telephone);
+                    PhoneNumber from = new PhoneNumber(twilioConfiguration.getTrialNumber());
+                    String message = "Informations enregistrées avec succès. Votre mot de passe par défaut " +
+                            "est '" + passe + "' et votre compte est activé.";
                     utilisateurService.ModifierUtilisateur(existingUser.getIdappuser(), existingUser);
-                    return new MessageResponse("Informations enregistrées avec succès. Votre mot de passe par défaut " +
-                            "est '" + passe + "' et votre compte est activé.", true);
+                    MessageCreator creator = Message.creator(to, from, message);
+                    creator.create();
+                    return new MessageResponse("Veuillez consulter votre boite SMS", true);
                 }
             }else {
                 return new MessageResponse("Veillez verifier le numero de permis renseigner .", false);
@@ -167,4 +219,15 @@ public class UtilisateurController {
         return utilisateurService.findByUtilisateur(id);
     }
 
+
+    @GetMapping("/afficherU/{idappuser}")
+    public AppUser affichUser (@PathVariable Long idappuser){
+        return appUserRepository.findByIdappuser(idappuser);
+    }
+
+
+    @GetMapping("/vehiculeuserrr/{idappuser}")
+    public List<Object[]> vehiculeuser(@PathVariable Long idappuser) {
+        return utilisateurRepository.findVehicules2ByIdappuser(idappuser);
+    }
     }

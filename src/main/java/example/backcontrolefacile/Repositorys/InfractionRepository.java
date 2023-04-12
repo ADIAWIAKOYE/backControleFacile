@@ -1,5 +1,6 @@
 package example.backcontrolefacile.Repositorys;
 
+import example.backcontrolefacile.Models.Alerte;
 import example.backcontrolefacile.Models.Infraction;
 import example.backcontrolefacile.Models.Utilisateur;
 import example.backcontrolefacile.Models.Vehicule;
@@ -16,6 +17,10 @@ public interface InfractionRepository extends JpaRepository<Infraction, Long> {
     Infraction findByIdinfraction(Long idinfraction);
 
     List<Infraction> findByVehicule(Vehicule idvehicule);
+
+    @Query(value = "SELECT infraction.* FROM infraction, vehicule WHERE infraction.vehicule_idvehicule = vehicule.idvehicule\n" +
+            "AND infraction.vehicule_idvehicule =:idvehicule ORDER BY infraction.date DESC" ,nativeQuery = true)
+    List<Infraction> AfficherinfractionParIdVehicule(Long idvehicule);
 
   //  List<Infraction> findByStatusAndVehiculeCartegriseUserId(Boolean status, Long userId);
 

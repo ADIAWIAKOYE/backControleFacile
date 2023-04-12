@@ -20,6 +20,7 @@ public interface CarteGriseRepository extends JpaRepository<CarteGrise, Long> {
 
     CarteGrise findByVehiculeAndStatus(Vehicule idvehicule, String status);
 
+
     CarteGrise findByUtilisateur(Long idappuser);
 
     @Query("SELECT cg FROM CarteGrise cg WHERE cg.vehicule.idvehicule = :idVehicule AND cg.dateecheance = (SELECT MAX(cg2.dateecheance) FROM CarteGrise cg2 WHERE cg2.vehicule.idvehicule = :idVehicule)")
