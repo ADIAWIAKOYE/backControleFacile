@@ -1,0 +1,42 @@
+{
+  "groups": [
+    {
+      "name": "",
+      "type": "example.backcontrolefacile.Configuration.TwilioConfiguration",
+      "sourceType": "example.backcontrolefacile.Configuration.TwilioConfiguration"
+    },
+    {
+      "name": "rsa",
+      "type": "example.backcontrolefacile.Controller.RsakeysConfig",
+      "sourceType": "example.backcontrolefacile.Controller.RsakeysConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "account-sid",
+      "type": "java.lang.String",
+      "sourceType": "example.backcontrolefacile.Configuration.TwilioConfiguration"
+    },
+    {
+      "name": "auth-token",
+      "type": "java.lang.String",
+      "sourceType": "example.backcontrolefacile.Configuration.TwilioConfiguration"
+    },
+    {
+      "name": "rsa.private-key",
+      "type": "java.security.interfaces.RSAPrivateKey",
+      "sourceType": "example.backcontrolefacile.Controller.RsakeysConfig"
+    },
+    {
+      "name": "rsa.public-key",
+      "type": "java.security.interfaces.RSAPublicKey",
+      "sourceType": "example.backcontrolefacile.Controller.RsakeysConfig"
+    },
+    {
+      "name": "trial-number",
+      "type": "java.lang.String",
+      "sourceType": "example.backcontrolefacile.Configuration.TwilioConfiguration"
+    }
+  ],
+  "hints": []
+}
