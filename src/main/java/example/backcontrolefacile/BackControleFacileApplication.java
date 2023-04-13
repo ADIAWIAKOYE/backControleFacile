@@ -42,10 +42,10 @@ public class BackControleFacileApplication {
             admin.setNom("ADIAWIAKOYE");
             admin.setPrenom("Ahmadou");
             admin.setDomicile("Yirimadio rue : 22 porte : 0938");
-            admin.setTelephone("+223 75468913");
+            admin.setTelephone("+22375468910");
             admin.setEmail("adiawiakoye.le10@gmail.com");
             admin.setPassword("Aa1010aA");
-           // admin.setProfile("http://127.0.0.1/controleFacile/images/utilisateur/icone.png");
+           //admin.setProfile("http://127.0.0.1/controleFacile/images/utilisateur/icone.png");
 
            adminService.addAdmin(admin);//new Admin("ADIAWIAKOYE","Ahmadou","Yirimadio rue : 22 porte : 0938","+223 75468913","adiawiakoye.le10@gmail.com",passwordEncoder().encode("Aa1010aA"),"http://127.0.0.1/controleFacile/images/utilisateur/icone.png"));
         };
