@@ -41,7 +41,8 @@ public class AlertTask {
         this.carteGriseRepository = carteGriseRepository;
     }
 //86400000
-    @Scheduled(fixedRate = 86400000)
+    //@Scheduled(fixedRate = 86400000)
+    @Scheduled(fixedRate = 1200000)
     public void createAlertForUser() {
         List<Infraction> infractions = infractionRepository.findByStatus(false);
         for (Infraction infraction : infractions) {
