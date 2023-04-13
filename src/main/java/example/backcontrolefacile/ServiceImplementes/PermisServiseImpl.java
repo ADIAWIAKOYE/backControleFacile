@@ -25,7 +25,7 @@ public class PermisServiseImpl implements PermisServise {
             return  ResponseEntity.ok(new MessageResponse("Error: cet permis existe déjà !", false));
             // return new MessageResponse("Error: Le nom d'utilisateur est déjà pris !");
         }
-
+        permis.setProfilepermis("http://127.0.0.1/controleFacile/images/utilisateur/permis.png");
         permisRepository.save(permis);
         return ResponseEntity.ok(new MessageResponse("Permis enregistré avec succès !", true));
     }

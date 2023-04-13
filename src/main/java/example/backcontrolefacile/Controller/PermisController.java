@@ -36,8 +36,8 @@ public class PermisController {
                                            @Param("commune") String commune, @Param("profession") String profession,
                                            @Param("lieunaissance") String lieunaissance, @Param("datenaissance") String datenaissance,
                                            @Param("numpermis") String numpermis, @Param("categoriepermis") String categoriepermis,
-                                           @Param("datedelivrance") String datedelivrance, @Param("dateecheance") LocalDate dateecheance,
-                                           @Param("file") MultipartFile file) {
+                                           @Param("datedelivrance") String datedelivrance, @Param("dateecheance") LocalDate dateecheance) {
+                                          // @Param("file") MultipartFile file) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dateFormatnaissance = LocalDate.parse(datenaissance, formatter);
 //        LocalDate dateFormatdpmc = LocalDate.parse(dpmc, formatter);
@@ -45,7 +45,7 @@ public class PermisController {
        // LocalDate dateFormatecheance = LocalDate.parse(dateecheance, formatter);
 
         Permis perm = new Permis();
-        String photoname = StringUtils.cleanPath(file.getOriginalFilename());
+       // String photoname = StringUtils.cleanPath(file.getOriginalFilename());
         try {
 
             perm.setDomicile(adresse);
@@ -60,10 +60,10 @@ public class PermisController {
             perm.setDatedelivrance(dateFormatdelivrance);
             perm.setDateecheance(dateecheance);
 
-            if (file != null) {
+        /*    if (file != null) {
 
                 perm.setProfilepermis(SaveImage.save("permis", file, photoname));
-            }
+            }*/
         }catch (Exception e) {
             // TODO: handle exception
         }
